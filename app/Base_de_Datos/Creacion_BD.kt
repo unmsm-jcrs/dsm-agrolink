@@ -4,6 +4,7 @@ import androidx.room.RoomDatabase
 import android.content.Context
 
 @Database(entities = [User::class, Cultivo::class], version = 1)
+
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun cultivoDao(): CultivoDao
