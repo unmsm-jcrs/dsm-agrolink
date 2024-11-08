@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F6F3">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Título Principal -->
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar cultivo"
+            android:textSize="24sp"
+            android:textColor="#006837"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Información del Cultivo Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Información del cultivo"
+            android:textColor="#006837"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/editTextTipoCultivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tipo de cultivo"
+            android:background="@drawable/edittext_background"
+            android:padding="14dp"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/editTextCantidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad (Hectáreas)"
+            android:background="@drawable/edittext_background"
+            android:padding="14dp"
+            android:textColor="#333333"
+            android:inputType="number"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/editTextFechaSiembra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de siembra"
+            android:background="@drawable/edittext_background"
+            android:padding="14dp"
+            android:textColor="#333333"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Imagen del Cultivo Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Imagen del cultivo"
+            android:textColor="#006837"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selecciona una imagen para el cultivo:"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/buttonAdjuntarImagen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adjuntar imagen"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#C8E6C9"
+            android:textColor="#1B5E20"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Botones de Cancelar y Guardar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/buttonCancelar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancelar"
+                android:backgroundTint="#BDBDBD"
+                android:textColor="#424242"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:layout_marginTop="16dp" />
+
+            <Button
+                android:id="@+id/buttonGuardar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Guardar"
+                android:backgroundTint="#006837"
+                android:textColor="#FFFFFF"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
