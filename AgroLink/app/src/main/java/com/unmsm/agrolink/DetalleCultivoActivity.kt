@@ -14,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.R
-import com.unmsm.agrolink.data.Cultivo
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
 
 @Composable

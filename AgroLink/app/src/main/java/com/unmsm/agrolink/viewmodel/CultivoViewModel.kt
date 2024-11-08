@@ -6,7 +6,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.unmsm.agrolink.data.Cultivo
 import com.unmsm.agrolink.data.DatabaseHelper
 
 class CultivoViewModel(application: Application) : AndroidViewModel(application) {
