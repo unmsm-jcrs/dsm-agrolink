@@ -1,47 +1,63 @@
-//MisCultivosActivity.kt
+// MisCultivosActivity.kt
 
 package com.unmsm.agrolink.ui
 
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.livedata.observeAsState
 import com.unmsm.agrolink.R
+import com.unmsm.agrolink.models.Cultivo
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
+import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MisCultivosActivity(
-    cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModel.Factory),
+    idUsuario: Int, // Parámetro que identifica al usuario
+    onNavigateToAgregarCultivo: () -> Unit,
+    onNavigateToDetalleCultivo: (Int) -> Unit,
+    cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModelFactory(LocalContext.current.applicationContext as Application)),
     modifier: Modifier = Modifier
 ) {
-    val cultivos by cultivoViewModel.cultivos.collectAsState(initial = emptyList())
+    val cultivos by cultivoViewModel.cultivos.observeAsState(emptyList())
+
+    // Cargar cultivos para el usuario específico cuando se muestra la pantalla
+    LaunchedEffect(idUsuario) {
+        cultivoViewModel.loadCultivos(idUsuario)
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("AgroLink") },
-                backgroundColor = Color(0xFF00695C),
-                contentColor = Color.White
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFF00695C),
+                    titleContentColor = Color.White
+                )
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Navegar a AgregarCultivoActivity */ },
+                onClick = onNavigateToAgregarCultivo,
                 containerColor = Color(0xFF80CBC4)
             ) {
-                Text("+", color = Color.White)
+                Icon(Icons.Default.Add, contentDescription = "Agregar", tint = Color.White)
             }
         },
         modifier = modifier
@@ -53,19 +69,19 @@ fun MisCultivosActivity(
                 .padding(16.dp)
         ) {
             items(cultivos) { cultivo ->
-                CultivoItem(cultivo)
+                CultivoItem(cultivo, onClick = { onNavigateToDetalleCultivo(cultivo.idCultivo) })
             }
         }
     }
 }
 
 @Composable
-fun CultivoItem(cultivo: Cultivo) {
+fun CultivoItem(cultivo: Cultivo, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { /* Navegar a DetalleCultivoActivity con cultivo.id */ },
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF78909C))
     ) {
@@ -76,13 +92,18 @@ fun CultivoItem(cultivo: Cultivo) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.sample_crop_image),
+                painter = painterResource(id = R.drawable.ic_launcher_foreground), // Reemplaza con la imagen de cultivo que tengas
                 contentDescription = "Imagen del cultivo",
                 modifier = Modifier.size(64.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(text = cultivo.tipo, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                Text(
+                    text = cultivo.tipoCultivo,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
                 Text(text = "Plantado el ${cultivo.fechaSiembra}", color = Color.White)
             }
         }
