@@ -1,61 +1,74 @@
+//AgregarCultivoActivity.kt
 package com.unmsm.agrolink.ui
 
-import android.app.AlertDialog
-import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import com.unmsm.agrolink.R
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
-import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
 
-class AgregarCultivoActivity : AppCompatActivity() {
+@Composable
+fun AgregarCultivoActivity(
+    cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModel.Factory)
+) {
+    var tipoCultivo by remember { mutableStateOf("") }
+    var cantidad by remember { mutableStateOf("") }
+    var fechaSiembra by remember { mutableStateOf("") }
 
-    private val cultivoViewModel: CultivoViewModel by viewModels {
-        CultivoViewModelFactory(application)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_agregar_cultivo)
-
-        val tipoCultivoEditText = findViewById<EditText>(R.id.editTextTipoCultivo)
-        val cantidadEditText = findViewById<EditText>(R.id.editTextCantidad)
-        val fechaSiembraEditText = findViewById<EditText>(R.id.editTextFechaSiembra)
-        val guardarButton = findViewById<Button>(R.id.buttonGuardar)
-        val cancelarButton = findViewById<Button>(R.id.buttonCancelar)
-
-        guardarButton.setOnClickListener {
-            val tipoCultivo = tipoCultivoEditText.text.toString()
-            val cantidad = cantidadEditText.text.toString().toIntOrNull()
-            val fechaSiembra = fechaSiembraEditText.text.toString()
-
-            if (tipoCultivo.isNotEmpty() && cantidad != null && fechaSiembra.isNotEmpty()) {
-                cultivoViewModel.agregarCultivo(1, tipoCultivo, cantidad, fechaSiembra) // `1` es el `userId` para pruebas
-                mostrarMensajeConfirmacion()
-            } else {
-                AlertDialog.Builder(this)
-                    .setTitle("Error")
-                    .setMessage("Por favor, completa todos los campos")
-                    .setPositiveButton("Aceptar") { dialog, _ -> dialog.dismiss() }
-                    .show()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Agregar cultivo") },
+                backgroundColor = Color(0xFF00695C),
+                contentColor = Color.White
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+        ) {
+            TextField(
+                value = tipoCultivo,
+                onValueChange = { tipoCultivo = it },
+                label = { Text("Tipo de cultivo") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TextField(
+                value = cantidad,
+                onValueChange = { cantidad = it },
+                label = { Text("Cantidad (Hectáreas)") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TextField(
+                value = fechaSiembra,
+                onValueChange = { fechaSiembra = it },
+                label = { Text("Fecha de siembra") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(onClick = { /* Cancelar */ }, colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)) {
+                    Text("Cancelar")
+                }
+                Button(onClick = {
+                    cultivoViewModel.agregarCultivo(tipoCultivo, cantidad.toIntOrNull() ?: 0, fechaSiembra)
+                }) {
+                    Text("Guardar")
+                }
             }
         }
-
-        cancelarButton.setOnClickListener {
-            finish()
-        }
-    }
-
-    private fun mostrarMensajeConfirmacion() {
-        AlertDialog.Builder(this)
-            .setTitle("Se agregó a tus Cultivos")
-            .setMessage("El nuevo cultivo se agregó exitosamente a tu lista de cultivos.")
-            .setPositiveButton("Confirmar") { dialog, _ ->
-                dialog.dismiss()
-                finish()
-            }
-            .show()
     }
 }

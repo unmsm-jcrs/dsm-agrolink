@@ -1,54 +1,57 @@
+//DetalleCultivoActivity.kt
+
 package com.unmsm.agrolink.ui
 
-import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.R
 import com.unmsm.agrolink.data.Cultivo
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
-import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
-import kotlinx.android.synthetic.main.activity_detalle_cultivo.*
 
-class DetalleCultivoActivity : AppCompatActivity() {
+@Composable
+fun DetalleCultivoActivity(
+    cultivoId: Int,
+    cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModel.Factory)
+) {
+    val cultivo = cultivoViewModel.getCultivoById(cultivoId).collectAsState(initial = null).value
 
-    private lateinit var cultivoViewModel: CultivoViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detalle_cultivo)
-
-        // Inicializar el ViewModel
-        cultivoViewModel = ViewModelProvider(this, CultivoViewModelFactory(application)).get(CultivoViewModel::class.java)
-
-        // Recibir los datos del cultivo a través del Intent
-        val cultivoId = intent.getIntExtra("cultivoId", -1)
-        if (cultivoId == -1) {
-            Toast.makeText(this, "Cultivo no encontrado", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        // Cargar los datos del cultivo
-        cultivoViewModel.getCultivoById(cultivoId).observe(this) { cultivo ->
-            if (cultivo != null) {
-                mostrarDatosCultivo(cultivo)
-            } else {
-                Toast.makeText(this, "Error al cargar los datos del cultivo", Toast.LENGTH_SHORT).show()
-                finish()
+    cultivo?.let {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("AgroLink") },
+                    backgroundColor = Color(0xFF00695C),
+                    contentColor = Color.White
+                )
+            }
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.sample_crop_image),
+                    contentDescription = "Imagen del cultivo",
+                    modifier = Modifier.size(128.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = it.tipo, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = "Plantado el ${it.fechaSiembra}")
+                Text(text = "${it.cantidad} Hectáreas")
             }
         }
-
-        // Configurar botón para agregar actividad
-        buttonAgregarActividad.setOnClickListener {
-            // Aquí puedes añadir la lógica para agregar una actividad
-            Toast.makeText(this, "Funcionalidad para agregar actividad no implementada", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun mostrarDatosCultivo(cultivo: Cultivo) {
-        textViewTipoCultivo.text = cultivo.tipo
-        textViewFechaSiembra.text = "Plantado el ${cultivo.fechaSiembra}"
-        textViewCantidad.text = "${cultivo.cantidad} Hectáreas"
     }
 }
