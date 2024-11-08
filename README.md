@@ -1,60 +1,62 @@
-# AgroLink
+# 🌱 AgroLink
 
-AgroLink es una aplicación móvil diseñada para gestionar diversos aspectos de la agricultura, brindando a los usuarios la capacidad de administrar y registrar sus cultivos de manera eficiente. La aplicación permite realizar un seguimiento de las actividades agrícolas, como riego o fertilización, y consultar el clima, entre otras funcionalidades.
+AgroLink es una aplicación móvil diseñada para facilitar la gestión de cultivos y actividades agrícolas. Con AgroLink, los agricultores pueden llevar un registro detallado de sus cultivos, programar actividades como riego y fertilización, y obtener información climática relevante, todo desde su dispositivo móvil.
 
-## Casos de Uso Implementados
+## 🚀 Funcionalidades
 
-### CUS 1: Iniciar Sesión
-- **Descripción**: Permite a los usuarios acceder a la aplicación mediante un nombre de usuario y contraseña.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario debe tener una cuenta creada en la aplicación.
+### Casos de Uso Implementados
 
-### CUS 2: Registrarse
-- **Descripción**: Permite a nuevos usuarios crear una cuenta en la aplicación.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario no debe tener una cuenta existente.
+- **CUS 1: Iniciar Sesión**
+  - 🔑 **Descripción**: Acceso seguro a la aplicación mediante usuario y contraseña.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: El usuario debe tener una cuenta activa en la aplicación.
 
-### CUS 3: Agregar Cultivo
-- **Descripción**: Permite a los usuarios agregar un nuevo cultivo a su lista.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario debe haber iniciado sesión.
+- **CUS 2: Registrarse**
+  - 📝 **Descripción**: Creación de cuenta para nuevos usuarios.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: No debe existir una cuenta asociada.
 
-## Casos de Uso Pendientes de Implementación
+- **CUS 3: Agregar Cultivo**
+  - 🌾 **Descripción**: Permite agregar un nuevo cultivo a la lista de gestión.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: El usuario debe haber iniciado sesión.
 
-### CUS 4: Consultar Cultivos
-- **Descripción**: Permite a los usuarios ver una lista de sus cultivos y las actividades agrícolas registradas de cada uno.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario debe haber iniciado sesión y tener cultivos registrados.
+### Casos de Uso Pendientes
 
-### CUS 5: Registrar Actividad Agrícola
-- **Descripción**: Permite a los usuarios registrar actividades relacionadas con sus cultivos, como riego o fertilización.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario debe haber iniciado sesión y tener cultivos registrados.
+- **CUS 4: Consultar Cultivos**
+  - 📋 **Descripción**: Visualización de la lista de cultivos y sus actividades registradas.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: Usuario registrado y con cultivos.
 
-### CUS 6: Recibir Notificaciones
-- **Descripción**: Permite a los usuarios recibir notificaciones sobre sus cultivos, como alertas de riego o plagas.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario debe haber iniciado sesión y tener cultivos registrados.
+- **CUS 5: Registrar Actividad Agrícola**
+  - 💧 **Descripción**: Registro de actividades como riego y fertilización.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: Usuario registrado y con cultivos.
 
-### CUS 7: Ver Clima
-- **Descripción**: Permite a los usuarios consultar las condiciones climáticas actuales y pronósticos para su ubicación utilizando una API de clima.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario debe haber iniciado sesión.
+- **CUS 6: Recibir Notificaciones**
+  - 🔔 **Descripción**: Notificaciones de alerta para actividades como riego y detección de plagas.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: Usuario registrado y con cultivos.
 
-### CUS 8: Generar Reporte de Cultivos
-- **Descripción**: Permite a los usuarios generar un reporte completo sobre sus cultivos, incluyendo estadísticas y actividades registradas.
-- **Actor principal**: Usuario
-- **Precondiciones**: El usuario debe haber iniciado sesión y tener al menos un cultivo registrado.
+- **CUS 7: Ver Clima**
+  - ☀️ **Descripción**: Información climática actual y pronóstico para la ubicación.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: Usuario registrado.
 
-## Requisitos
+- **CUS 8: Generar Reporte de Cultivos**
+  - 📈 **Descripción**: Generación de reporte completo de cultivos con estadísticas.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: Usuario registrado con al menos un cultivo.
+
+## 📋 Requisitos del Sistema
 
 - **Android Studio**: Koala | 2024.1.1
-- **Target SDK Version**: 34
-- **Min SDK Version**: 24
-- **Compile SDK Version**: 34
+- **SDK Objetivo**: 34
+- **SDK Mínimo**: 24
+- **SDK de Compilación**: 34
 
-## Instalación
+## 🛠️ Instalación
 
-1. Clona este repositorio.
+1. Clona el repositorio:
    ```bash
    git clone https://github.com/usuario/agrolink.git
