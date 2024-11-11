@@ -49,20 +49,21 @@ fun AgregarCultivoActivity(
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Agregar cultivo") },
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF00695C), titleContentColor = Color.White)
-            )
-        }
-    ) { padding ->
+    Scaffold() {
+        padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp)
         ) {
+            Text(
+                text = "Agregar cultivo",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+            )
             TextField(
                 value = tipoCultivo,
                 onValueChange = { tipoCultivo = it },

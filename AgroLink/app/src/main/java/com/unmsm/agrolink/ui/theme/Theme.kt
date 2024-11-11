@@ -142,6 +142,7 @@ private val highContrastLightColorScheme = lightColorScheme(
     inverseSurface = inverseSurfaceLightHighContrast,
     inverseOnSurface = inverseOnSurfaceLightHighContrast,
     inversePrimary = inversePrimaryLightHighContrast,
+    surfaceTint = borderBottonBarHighContrast
 )
 
 private val mediumContrastDarkColorScheme = darkColorScheme(
@@ -173,6 +174,7 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
     inverseSurface = inverseSurfaceDarkMediumContrast,
     inverseOnSurface = inverseOnSurfaceDarkMediumContrast,
     inversePrimary = inversePrimaryDarkMediumContrast,
+
 )
 
 private val highContrastDarkColorScheme = darkColorScheme(
@@ -252,7 +254,7 @@ fun AgroLinkTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = highContrastLightColorScheme,
         typography = Typography,
         shapes = Shapes,
         content = content

@@ -26,7 +26,6 @@ import com.unmsm.agrolink.models.Cultivo
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
 import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MisCultivosActivity(
     idUsuario: Int, // Parámetro que identifica al usuario
@@ -37,21 +36,11 @@ fun MisCultivosActivity(
 ) {
     val cultivos by cultivoViewModel.cultivos.observeAsState(emptyList())
 
-    // Cargar cultivos para el usuario específico cuando se muestra la pantalla
     LaunchedEffect(idUsuario) {
         cultivoViewModel.loadCultivos(idUsuario)
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("AgroLink") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF00695C),
-                    titleContentColor = Color.White
-                )
-            )
-        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToAgregarCultivo,
@@ -61,15 +50,31 @@ fun MisCultivosActivity(
             }
         },
         modifier = modifier
-    ) { padding ->
-        LazyColumn(
-            contentPadding = padding,
+    ) {
+        paddingValues ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp) // Padding general de la pantalla
         ) {
-            items(cultivos) { cultivo ->
-                CultivoItem(cultivo, onClick = { onNavigateToDetalleCultivo(cultivo.idCultivo) })
+            // Título "Mis cultivos" (cerca de la parte superior)
+            Text(
+                text = "Mis cultivos",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier
+            )
+
+            // Listado de cultivos
+            LazyColumn(
+                contentPadding = paddingValues,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 8.dp) // Padding superior para la lista, evitando solapamiento con el texto
+            ) {
+                items(cultivos) { cultivo ->
+                    CultivoItem(cultivo, onClick = { onNavigateToDetalleCultivo(cultivo.idCultivo) })
+                }
             }
         }
     }

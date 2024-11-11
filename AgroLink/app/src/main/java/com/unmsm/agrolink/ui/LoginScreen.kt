@@ -3,19 +3,27 @@
 package com.unmsm.agrolink.ui
 
 import android.app.Application
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.viewmodel.AuthViewModel
 import com.unmsm.agrolink.viewmodel.AuthViewModelFactory
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import com.unmsm.agrolink.R
+import com.unmsm.agrolink.ui.components.ButtonSize
+import com.unmsm.agrolink.ui.components.CustomButton
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onLoginSuccess: (Int) -> Unit,
@@ -26,59 +34,90 @@ fun LoginScreen(
     var contrasena by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    val imageHeight = 300.dp
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text("Inicio de sesión", style = MaterialTheme.typography.headlineSmall)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Correo") },
-            modifier = Modifier.fillMaxWidth()
+        Image(
+            painter = painterResource(id = R.drawable.login_header_landscape1),
+            contentDescription = "Imagen del login",
+            modifier = Modifier
+                .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
+                .height(imageHeight)  // Recorta la imagen según la altura que indiques
+                .align(Alignment.TopCenter),  // Alineado al top
+            contentScale = ContentScale.Crop
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = contrasena,
-            onValueChange = { contrasena = it },
-            label = { Text("Contraseña") },
-            modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                val userId = authViewModel.login(email, contrasena)
-                if (userId != null) {
-                    onLoginSuccess(userId)
-                } else {
-                    errorMessage = "Correo o contraseña incorrectos"
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+                .padding(top = imageHeight) // Añade padding superior para que la columna empiece debajo de la imagen
+                .align(Alignment.BottomCenter),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Iniciar sesión")
-        }
+            Text(
+                text = "Inicio de sesión",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = "Inicia sesión usando tu cuenta AgroLink",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Correo") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        TextButton(onClick = onNavigateToRegister) {
-            Text("¿No tienes una cuenta? Regístrate")
-        }
 
-        errorMessage?.let {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(it, color = MaterialTheme.colorScheme.error)
+
+            OutlinedTextField(
+                value = contrasena,
+                onValueChange = { contrasena = it },
+                label = { Text("Contraseña") },
+                modifier = Modifier.fillMaxWidth(),
+                visualTransformation = PasswordVisualTransformation()
+            )
+            Spacer(modifier = Modifier.height(60.dp))
+            CustomButton(
+                onClick = {
+                    val userId = authViewModel.login(email, contrasena)
+                    if (userId != null) {
+                        onLoginSuccess(userId)
+                    } else {
+                        errorMessage = "Correo o contraseña incorrectos"
+                    }
+                },
+                buttonText = "Iniciar sesión",
+                modifier = Modifier.fillMaxWidth(),
+                type = 2,
+                size = ButtonSize.Large
+            )
+
+            TextButton(
+                onClick = onNavigateToRegister,
+                modifier = Modifier
+                    .clickable { onNavigateToRegister() }
+                    .padding(0.dp)
+            ) {
+                Text(
+                    text = "¿No tienes una cuenta? Regístrate",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            errorMessage?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(it, color = MaterialTheme.colorScheme.error)
+            }
         }
     }
 }
+
