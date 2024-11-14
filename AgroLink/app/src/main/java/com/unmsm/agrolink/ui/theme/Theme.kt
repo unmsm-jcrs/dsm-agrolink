@@ -174,6 +174,8 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
     inverseSurface = inverseSurfaceDarkMediumContrast,
     inverseOnSurface = inverseOnSurfaceDarkMediumContrast,
     inversePrimary = inversePrimaryDarkMediumContrast,
+    surfaceTint = borderBottonBarMediumContrast
+
 
 )
 
@@ -243,8 +245,8 @@ fun AgroLinkTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> darkScheme
-        else -> lightScheme
+        darkTheme -> highContrastDarkColorScheme
+        else -> mediumContrastDarkColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -254,7 +256,7 @@ fun AgroLinkTheme(
     }
 
     MaterialTheme(
-        colorScheme = highContrastLightColorScheme,
+        colorScheme = colorScheme,
         typography = Typography,
         shapes = Shapes,
         content = content

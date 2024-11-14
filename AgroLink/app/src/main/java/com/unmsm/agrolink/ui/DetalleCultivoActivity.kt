@@ -119,7 +119,7 @@ fun DetalleCultivoActivity(
 fun CultivoCard(cultivo: Cultivo) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF78909C))
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
     ) {
         Row(
             modifier = Modifier
@@ -128,15 +128,15 @@ fun CultivoCard(cultivo: Cultivo) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = painterResource(id = R.drawable.icon_my_crops),
                 contentDescription = "Imagen del cultivo",
                 modifier = Modifier.size(64.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(text = cultivo.tipoCultivo, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
-                Text(text = "${cultivo.cantidad} Hectáreas", color = Color.White)
-                Text(text = cultivo.fechaSiembra, color = Color.White)
+                Text(text = "${cultivo.cantidad} Hectáreas", color = MaterialTheme.colorScheme.onTertiary)
+                Text(text = cultivo.fechaSiembra, color = MaterialTheme.colorScheme.onTertiary)
             }
         }
     }

@@ -76,7 +76,8 @@ fun LoginScreen(
                     }
                 },
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -126,13 +127,14 @@ fun LoginScreen(
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
             errorMessage?.let {
                 Text(it,
-                    color = MaterialTheme.colorScheme.errorContainer,
+                    color = MaterialTheme.colorScheme.onError,
                     style = MaterialTheme.typography.labelMedium
                 )
             }

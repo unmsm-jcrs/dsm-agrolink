@@ -24,7 +24,7 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = AmaranthFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 30.sp
+        fontSize = 36.sp
     ), //Titulo general
     titleMedium = TextStyle(
         fontFamily = AmaranthFont,

@@ -88,7 +88,7 @@ fun CultivoItem(cultivo: Cultivo, onClick: () -> Unit) {
             .padding(vertical = 8.dp)
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF78909C))
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
     ) {
         Row(
             modifier = Modifier
@@ -97,19 +97,22 @@ fun CultivoItem(cultivo: Cultivo, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground), // Reemplaza con la imagen de cultivo que tengas
+                painter = painterResource(id = R.drawable.icon_my_crops), // Reemplaza con la imagen de cultivo que tengas
                 contentDescription = "Imagen del cultivo",
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
                     text = cultivo.tipoCultivo,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onTertiary
                 )
-                Text(text = "Plantado el ${cultivo.fechaSiembra}", color = Color.White)
+                Text(
+                    text = "Plantado el ${cultivo.fechaSiembra}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiary
+                )
             }
         }
     }
