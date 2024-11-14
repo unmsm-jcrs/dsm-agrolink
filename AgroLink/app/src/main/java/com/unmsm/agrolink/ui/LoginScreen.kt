@@ -4,22 +4,26 @@ package com.unmsm.agrolink.ui
 
 import android.app.Application
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.viewmodel.AuthViewModel
 import com.unmsm.agrolink.viewmodel.AuthViewModelFactory
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import com.unmsm.agrolink.R
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
@@ -36,7 +40,9 @@ fun LoginScreen(
 
     val imageHeight = 300.dp
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Image(
             painter = painterResource(id = R.drawable.login_header_landscape1),
@@ -63,10 +69,16 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = "Inicia sesión usando tu cuenta AgroLink",
+                text = buildAnnotatedString {
+                    append("Inicia sesión usando tu cuenta ")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append("AgroLink")
+                    }
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.fillMaxWidth()
             )
+            Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
                 value = email,
@@ -76,7 +88,6 @@ fun LoginScreen(
             )
 
 
-
             OutlinedTextField(
                 value = contrasena,
                 onValueChange = { contrasena = it },
@@ -84,7 +95,7 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation()
             )
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             CustomButton(
                 onClick = {
                     val userId = authViewModel.login(email, contrasena)
@@ -107,15 +118,23 @@ fun LoginScreen(
                     .padding(0.dp)
             ) {
                 Text(
-                    text = "¿No tienes una cuenta? Regístrate",
+                    text = buildAnnotatedString {
+                        append("¿No tienes una cuenta? ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("Regístrate")
+                        }
+                    },
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
                 )
             }
 
             errorMessage?.let {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(it, color = MaterialTheme.colorScheme.error)
+                Text(it,
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    style = MaterialTheme.typography.labelMedium
+                )
             }
         }
     }
