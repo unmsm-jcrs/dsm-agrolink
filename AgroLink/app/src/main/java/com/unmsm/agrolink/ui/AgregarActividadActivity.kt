@@ -14,9 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.ui.Alignment
 
 @Composable
@@ -46,7 +44,7 @@ fun AgregarActividadActivity(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp),
+                .padding(25.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {

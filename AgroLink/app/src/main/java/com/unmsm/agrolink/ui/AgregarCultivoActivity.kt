@@ -7,6 +7,8 @@ import android.app.DatePickerDialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -57,7 +59,7 @@ fun AgregarCultivoActivity(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp),
+                .padding(25.dp),
             verticalArrangement = Arrangement.SpaceBetween, // Espacio entre elementos para botones en la parte inferior
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -70,14 +72,14 @@ fun AgregarCultivoActivity(
                     color = MaterialTheme.colorScheme.primaryContainer,
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
-                TextField(
+                OutlinedTextField(
                     value = tipoCultivo,
                     onValueChange = { tipoCultivo = it },
                     label = { Text("Tipo de cultivo") },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                TextField(
+                OutlinedTextField(
                     value = cantidad,
                     onValueChange = { cantidad = it },
                     label = { Text("Cantidad (Hectáreas)") },
@@ -94,7 +96,7 @@ fun AgregarCultivoActivity(
                     readOnly = true,
                     trailingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_calendar),
+                            imageVector = Icons.Default.CalendarToday,
                             contentDescription = "Seleccionar fecha",
                             modifier = Modifier
                                 .size(24.dp)

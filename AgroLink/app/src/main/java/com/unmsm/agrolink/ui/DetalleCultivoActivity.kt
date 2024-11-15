@@ -35,7 +35,7 @@ fun DetalleCultivoActivity(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(25.dp)
         ) {
             Text("Mi Cultivo", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))

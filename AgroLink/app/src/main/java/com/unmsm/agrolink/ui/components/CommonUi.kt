@@ -1,6 +1,5 @@
 package com.unmsm.agrolink.ui.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -57,7 +56,7 @@ fun CustomButton(
     ) {
         Text(
             text = buttonText,
-            style = MaterialTheme.typography.displayLarge
+            style = textStyle
         )
     }
 }

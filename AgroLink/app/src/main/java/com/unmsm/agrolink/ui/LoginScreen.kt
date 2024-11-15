@@ -62,7 +62,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 16.dp)
+                .padding(horizontal = 25.dp, vertical = 16.dp)
                 .padding(top = imageHeight) // Añade padding superior para que la columna empiece debajo de la imagen
                 .align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,
