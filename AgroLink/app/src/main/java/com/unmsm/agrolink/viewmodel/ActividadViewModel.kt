@@ -21,6 +21,7 @@ class ActividadViewModel(application: Application) : AndroidViewModel(applicatio
         _actividades.value = dbHelper.getActividadesPorCultivo(cultivoId)
     }
 
+
     // Agregar una nueva actividad a un cultivo
     fun agregarActividad(cultivoId: Int, tipoActividad: String, fecha: String, notas: String, cantidad: Double? = null) {
         dbHelper.insertActividad(cultivoId, tipoActividad, fecha, notas, cantidad)

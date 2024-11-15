@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -25,7 +26,7 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AgregarCultivoActivity(
-    userId: Int, // Agrega el parámetro userId
+    userId: Int, // Parámetro userId
     onNavigateBack: () -> Unit,
     cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModelFactory(LocalContext.current.applicationContext as Application))
 ) {
@@ -49,59 +50,67 @@ fun AgregarCultivoActivity(
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 
-    Scaffold() {
-        padding ->
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween, // Espacio entre elementos para botones en la parte inferior
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Agregar cultivo",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-            )
-            TextField(
-                value = tipoCultivo,
-                onValueChange = { tipoCultivo = it },
-                label = { Text("Tipo de cultivo") },
+            Column(
                 modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            TextField(
-                value = cantidad,
-                onValueChange = { cantidad = it },
-                label = { Text("Cantidad (Hectáreas)") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            ) {
+                Text(
+                    text = "Agregar cultivo",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+                TextField(
+                    value = tipoCultivo,
+                    onValueChange = { tipoCultivo = it },
+                    label = { Text("Tipo de cultivo") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TextField(
+                    value = cantidad,
+                    onValueChange = { cantidad = it },
+                    label = { Text("Cantidad (Hectáreas)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            // Campo de fecha con ícono de calendario
-            OutlinedTextField(
-                value = fechaSiembra,
-                onValueChange = {},
-                label = { Text("Fecha de siembra") },
-                readOnly = true,
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_calendar),
-                        contentDescription = "Seleccionar fecha",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clickable { datePickerDialog.show() }
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+                // Campo de fecha con ícono de calendario
+                OutlinedTextField(
+                    value = fechaSiembra,
+                    onValueChange = {},
+                    label = { Text("Fecha de siembra") },
+                    readOnly = true,
+                    trailingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_calendar),
+                            contentDescription = "Seleccionar fecha",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable { datePickerDialog.show() }
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            // Botones de Cancelar y Guardar en la parte inferior
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
             ) {
                 Button(
                     onClick = onNavigateBack,

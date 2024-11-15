@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.unmsm.agrolink.ui.components.BottonBar
 import com.unmsm.agrolink.ui.components.TopBar
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 @Composable
 fun AgroLinkApp(
@@ -59,8 +59,8 @@ fun AgroLinkApp(
     } else {
         // Contenido principal de la aplicación cuando el usuario está autenticado
         Scaffold(
-            topBar = {TopBar()},
-            bottomBar = {BottonBar(navController)}
+            topBar = { TopBar() },
+            bottomBar = { BottonBar(navController) }
         ) { innerPadding ->
             NavHost(
                 navController = navController,
@@ -69,7 +69,7 @@ fun AgroLinkApp(
             ) {
                 composable("misCultivos") {
                     MisCultivosActivity(
-                        idUsuario = userId!!, // Pasa el userId como idUsuario
+                        idUsuario = userId!!,
                         onNavigateToAgregarCultivo = { navController.navigate("agregarCultivo") },
                         onNavigateToDetalleCultivo = { cultivoId ->
                             navController.navigate("detalleCultivo/$cultivoId")
@@ -88,15 +88,12 @@ fun AgroLinkApp(
                 ) { backStackEntry ->
                     val cultivoId = backStackEntry.arguments?.getInt("cultivoId") ?: 0
                     DetalleCultivoActivity(
-                        userId = userId!!,
                         cultivoId = cultivoId,
-                        onNavigateBack = { navController.popBackStack() },
                         onNavigateToAgregarActividad = {
                             navController.navigate("agregarActividad/$cultivoId")
                         }
                     )
                 }
-                // Agrega esta sección para navegar a AgregarActividadActivity
                 composable(
                     route = "agregarActividad/{cultivoId}",
                     arguments = listOf(navArgument("cultivoId") { type = NavType.IntType })

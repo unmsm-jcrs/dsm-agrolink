@@ -9,15 +9,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
@@ -28,36 +25,27 @@ import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
 
 @Composable
 fun MisCultivosActivity(
-    idUsuario: Int, // Parámetro que identifica al usuario
+    idUsuario: Int,
     onNavigateToAgregarCultivo: () -> Unit,
     onNavigateToDetalleCultivo: (Int) -> Unit,
     modifier: Modifier = Modifier,
     cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModelFactory(LocalContext.current.applicationContext as Application))
 ) {
     val cultivos by cultivoViewModel.cultivos.observeAsState(emptyList())
+    var isDeleteMode by remember { mutableStateOf(false) } // Estado para el modo de eliminación
 
     LaunchedEffect(idUsuario) {
         cultivoViewModel.loadCultivos(idUsuario)
     }
 
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateToAgregarCultivo,
-                containerColor = Color(0xFF80CBC4)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar", tint = Color.White)
-            }
-        },
         modifier = modifier
-    ) {
-        paddingValues ->
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp) // Padding general de la pantalla
+                .padding(16.dp)
         ) {
-            // Título "Mis cultivos" (cerca de la parte superior)
             Text(
                 text = "Mis cultivos",
                 style = MaterialTheme.typography.titleMedium,
@@ -65,14 +53,48 @@ fun MisCultivosActivity(
                 modifier = Modifier
             )
 
-            // Listado de cultivos
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = onNavigateToAgregarCultivo,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF80CBC4))
+                ) {
+                    Text("+ Agregar cultivo")
+                }
+
+                Button(
+                    onClick = { isDeleteMode = !isDeleteMode },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFCDD2))
+                ) {
+                    Text("Eliminar cultivo")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             LazyColumn(
                 contentPadding = paddingValues,
                 modifier = Modifier
                     .fillMaxSize()
             ) {
                 items(cultivos) { cultivo ->
-                    CultivoItem(cultivo, onClick = { onNavigateToDetalleCultivo(cultivo.idCultivo) })
+                    CultivoItem(
+                        cultivo = cultivo,
+                        isDeleteMode = isDeleteMode,
+                        onDelete = {
+                            cultivoViewModel.eliminarCultivo(cultivo.idCultivo, idUsuario)
+                            isDeleteMode = false // Desactivar el modo de eliminación después de eliminar
+                        },
+                        onClick = {
+                            if (!isDeleteMode) {
+                                onNavigateToDetalleCultivo(cultivo.idCultivo)
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -80,14 +102,27 @@ fun MisCultivosActivity(
 }
 
 @Composable
-fun CultivoItem(cultivo: Cultivo, onClick: () -> Unit) {
+fun CultivoItem(
+    cultivo: Cultivo,
+    isDeleteMode: Boolean,
+    onDelete: () -> Unit,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick() },
+            .clickable {
+                if (isDeleteMode) {
+                    onDelete()
+                } else {
+                    onClick()
+                }
+            },
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
+        colors = CardDefaults.cardColors(
+            if (isDeleteMode) Color(0xFFFFCDD2) else MaterialTheme.colorScheme.tertiary
+        )
     ) {
         Row(
             modifier = Modifier
@@ -96,23 +131,32 @@ fun CultivoItem(cultivo: Cultivo, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.icon_my_crops), // Reemplaza con la imagen de cultivo que tengas
+                painter = painterResource(id = R.drawable.icon_my_crops),
                 contentDescription = "Imagen del cultivo",
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
-            Column {
+            Column(
+                modifier = Modifier.weight(1f) // Hace que la columna ocupe el espacio disponible
+            ) {
                 Text(
                     text = cultivo.tipoCultivo,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onTertiary
                 )
                 Text(
-                    text = "Plantado el ${cultivo.fechaSiembra}",
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = "${cultivo.cantidad} Hectáreas", // Muestra el número de hectáreas
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onTertiary
                 )
             }
+            Text(
+                text = cultivo.fechaSiembra, // Muestra la fecha de siembra a la derecha
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onTertiary,
+                modifier = Modifier.align(Alignment.CenterVertically) // Centra verticalmente el texto
+            )
         }
     }
 }
+
