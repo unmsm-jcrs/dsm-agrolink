@@ -109,7 +109,7 @@ val surfaceContainerLowLightHighContrast = Color(0xFFEFF5F2)
 val surfaceContainerLightHighContrast = Color(0xFFE9EFEC)
 val surfaceContainerHighLightHighContrast = Color(0xFFE3EAE6)
 val surfaceContainerHighestLightHighContrast = Color(0xFFDEE4E1)
-val borderBottonBarHighContrast = Color(0xFFBEBEBE)//esta bien ->borde de bottonbar
+val borderBottonBarLightHighContrast = Color(0xFFBEBEBE)//esta bien ->borde de bottonbar
 
 val primaryDark = Color(0xFF84D5C4)
 val onPrimaryDark = Color(0xFF00382F)
@@ -160,7 +160,7 @@ val tertiaryDarkMediumContrast = Color(0xFF7C97AD)
 val onTertiaryDarkMediumContrast = Color(0xFF000000)
 val tertiaryContainerDarkMediumContrast = Color(0xFF7694AD)
 val onTertiaryContainerDarkMediumContrast = Color(0xFF000000)
-val errorDarkMediumContrast = Color(0xFF370001)//FFBAB1
+val errorDarkMediumContrast = Color(0xFF370001)
 val onErrorDarkMediumContrast = Color(0xFFFFBAB1)
 val errorContainerDarkMediumContrast = Color(0xFFFF5449)
 val onErrorContainerDarkMediumContrast = Color(0xFF000000)
@@ -183,22 +183,29 @@ val surfaceContainerLowDarkMediumContrast = Color(0xFF171D1B)
 val surfaceContainerDarkMediumContrast = Color(0xFF1B211F)
 val surfaceContainerHighDarkMediumContrast = Color(0xFF252B29)
 val surfaceContainerHighestDarkMediumContrast = Color(0xFF303634)
-val borderBottonBarMediumContrast = Color(0xFF182522)
 
 val primaryDarkHighContrast = Color(0xFFECFFF9)
 val onPrimaryDarkHighContrast = Color(0xFF000000)
-val primaryContainerDarkHighContrast = Color(0xFF88DAC8)
+
+
+val primaryContainerDarkHighContrast = Color(0xFFB5D1C9)//0xFF88DAC8
 val onPrimaryContainerDarkHighContrast = Color(0xFF000000)
-val secondaryDarkHighContrast = Color(0xFFECFFF9)
+
+
+val secondaryDarkHighContrast = Color(0xFFECFAF9)
 val onSecondaryDarkHighContrast = Color(0xFF000000)
-val secondaryContainerDarkHighContrast = Color(0xFFB5D1C9)
+
+
+val secondaryContainerDarkHighContrast = Color(0xFF88DAC8)//0xFFB5D1C9
 val onSecondaryContainerDarkHighContrast = Color(0xFF000000)
+
+
 val tertiaryDarkHighContrast = Color(0xFFF9FBFF)
 val onTertiaryDarkHighContrast = Color(0xFF000000)
 val tertiaryContainerDarkHighContrast = Color(0xFFAFCFE9)
 val onTertiaryContainerDarkHighContrast = Color(0xFF000000)
-val errorDarkHighContrast = Color(0xFFFFF9F9)
-val onErrorDarkHighContrast = Color(0xFF000000)
+val errorDarkHighContrast = Color(0xFF000000)
+val onErrorDarkHighContrast = Color(0xFFFF5449)
 val errorContainerDarkHighContrast = Color(0xFFFFBAB1)
 val onErrorContainerDarkHighContrast = Color(0xFF000000)
 val backgroundDarkHighContrast = Color(0xFF0E1513)
@@ -220,3 +227,4 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF171D1B)
 val surfaceContainerDarkHighContrast = Color(0xFF1B211F)
 val surfaceContainerHighDarkHighContrast = Color(0xFF252B29)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF303634)
+val borderBottonBarDarkHighContrast = Color(0xFF202725)

@@ -130,7 +130,7 @@ fun CultivoCard(cultivo: Cultivo) {
             Image(
                 painter = painterResource(id = R.drawable.icon_my_crops),
                 contentDescription = "Imagen del cultivo",
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(64.dp),
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {

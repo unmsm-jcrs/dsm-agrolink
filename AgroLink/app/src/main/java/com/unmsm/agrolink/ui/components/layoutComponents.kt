@@ -15,9 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -101,7 +100,7 @@ fun BottonBar(
             )
 
             IconButtonWithText(
-                imageRes = R.drawable.icono_user,
+                imageRes = R.drawable.icon_user,
                 contentDescription = "Usuario",
                 label = "Salir",
                 onClick = {
@@ -133,10 +132,11 @@ fun IconButtonWithText(
                 .clickable { onClick() },
             contentAlignment = Alignment.Center
         ) {
-            Image(
+            Icon(
                 painter = painterResource(id = imageRes),
                 contentDescription = contentDescription,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
         Text(

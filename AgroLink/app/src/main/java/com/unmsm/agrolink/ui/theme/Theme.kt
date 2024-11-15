@@ -142,7 +142,7 @@ private val highContrastLightColorScheme = lightColorScheme(
     inverseSurface = inverseSurfaceLightHighContrast,
     inverseOnSurface = inverseOnSurfaceLightHighContrast,
     inversePrimary = inversePrimaryLightHighContrast,
-    surfaceTint = borderBottonBarHighContrast
+    surfaceTint = borderBottonBarLightHighContrast
 )
 
 private val mediumContrastDarkColorScheme = darkColorScheme(
@@ -174,7 +174,6 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
     inverseSurface = inverseSurfaceDarkMediumContrast,
     inverseOnSurface = inverseOnSurfaceDarkMediumContrast,
     inversePrimary = inversePrimaryDarkMediumContrast,
-    surfaceTint = borderBottonBarMediumContrast
 
 
 )
@@ -208,6 +207,7 @@ private val highContrastDarkColorScheme = darkColorScheme(
     inverseSurface = inverseSurfaceDarkHighContrast,
     inverseOnSurface = inverseOnSurfaceDarkHighContrast,
     inversePrimary = inversePrimaryDarkHighContrast,
+    surfaceTint = borderBottonBarDarkHighContrast
 )
 
 
@@ -246,7 +246,7 @@ fun AgroLinkTheme(
         }
 
         darkTheme -> highContrastDarkColorScheme
-        else -> mediumContrastDarkColorScheme
+        else -> highContrastLightColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
