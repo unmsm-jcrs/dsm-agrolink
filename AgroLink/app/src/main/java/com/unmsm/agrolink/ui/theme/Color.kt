@@ -96,7 +96,7 @@ val surfaceLightHighContrast = Color(0xFFE9EFEC)//esta bien ->color de tarjetas 
 val onSurfaceLightHighContrast = Color(0xFF000000)
 val surfaceVariantLightHighContrast = Color(0xFFDAE5E1)
 val onSurfaceVariantLightHighContrast = Color(0xFF1C2623)
-val outlineLightHighContrast = Color(0xFF3B4542)
+val outlineLightHighContrast = Color(0xFFCDE8E0)
 val outlineVariantLightHighContrast = Color(0xFF3B4542)
 val scrimLightHighContrast = Color(0xFF000000)
 val inverseSurfaceLightHighContrast = Color(0xFF2B3230)
@@ -186,21 +186,13 @@ val surfaceContainerHighestDarkMediumContrast = Color(0xFF303634)
 
 val primaryDarkHighContrast = Color(0xFFECFFF9)
 val onPrimaryDarkHighContrast = Color(0xFF000000)
-
-
 val primaryContainerDarkHighContrast = Color(0xFFB5D1C9)//0xFF88DAC8
 val onPrimaryContainerDarkHighContrast = Color(0xFF000000)
-
-
 val secondaryDarkHighContrast = Color(0xFFECFAF9)
 val onSecondaryDarkHighContrast = Color(0xFF000000)
-
-
 val secondaryContainerDarkHighContrast = Color(0xFF88DAC8)//0xFFB5D1C9
 val onSecondaryContainerDarkHighContrast = Color(0xFF000000)
-
-
-val tertiaryDarkHighContrast = Color(0xFFF9FBFF)
+val tertiaryDarkHighContrast = Color(0xFFA0B3D8)
 val onTertiaryDarkHighContrast = Color(0xFF000000)
 val tertiaryContainerDarkHighContrast = Color(0xFFAFCFE9)
 val onTertiaryContainerDarkHighContrast = Color(0xFF000000)
@@ -214,7 +206,7 @@ val surfaceDarkHighContrast = Color(0xFF0E1513)
 val onSurfaceDarkHighContrast = Color(0xFFFFFFFF)
 val surfaceVariantDarkHighContrast = Color(0xFF3F4946)
 val onSurfaceVariantDarkHighContrast = Color(0xFFF3FDF9)
-val outlineDarkHighContrast = Color(0xFFC3CDC9)
+val outlineDarkHighContrast = Color(0xFF4C9E8F)
 val outlineVariantDarkHighContrast = Color(0xFFC3CDC9)
 val scrimDarkHighContrast = Color(0xFF000000)
 val inverseSurfaceDarkHighContrast = Color(0xFFDEE4E1)

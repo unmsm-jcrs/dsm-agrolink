@@ -128,7 +128,7 @@ fun IconButtonWithText(
             modifier = Modifier
                 .width(60.dp) // Ancho personalizado
                 .height(40.dp) // Mantiene la altura original
-                .background(color = if (background)MaterialTheme.colorScheme.secondaryContainer  else Color.Transparent, shape = CircleShape) // Fondo circular con color dinámico
+                .background(color = if (background)MaterialTheme.colorScheme.outline  else Color.Transparent, shape = CircleShape) // Fondo circular con color dinámico
                 .clickable { onClick() },
             contentAlignment = Alignment.Center
         ) {

@@ -8,6 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.viewmodel.AuthViewModel
 import com.unmsm.agrolink.viewmodel.AuthViewModelFactory
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import com.unmsm.agrolink.R
@@ -39,7 +43,7 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
+    var passwordVisible by remember { mutableStateOf(false) }
     val imageHeight = 300.dp
     Box(
         modifier = Modifier
@@ -97,8 +101,21 @@ fun LoginScreen(
                 onValueChange = { contrasena = it },
                 label = { Text("Contraseña") },
                 modifier = Modifier.fillMaxWidth(),
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                trailingIcon = {
+                    val image = if (passwordVisible) {
+                        Icons.Default.Visibility // Icono de ojo abierto
+                    } else {
+                        Icons.Default.VisibilityOff // Icono de ojo cerrado
+                    }
+
+                    val description = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = image, contentDescription = description)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(30.dp))
             CustomButton(

@@ -31,8 +31,8 @@ fun MisCultivosActivity(
     idUsuario: Int, // Parámetro que identifica al usuario
     onNavigateToAgregarCultivo: () -> Unit,
     onNavigateToDetalleCultivo: (Int) -> Unit,
-    cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModelFactory(LocalContext.current.applicationContext as Application)),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cultivoViewModel: CultivoViewModel = viewModel(factory = CultivoViewModelFactory(LocalContext.current.applicationContext as Application))
 ) {
     val cultivos by cultivoViewModel.cultivos.observeAsState(emptyList())
 
@@ -70,7 +70,6 @@ fun MisCultivosActivity(
                 contentPadding = paddingValues,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 8.dp) // Padding superior para la lista, evitando solapamiento con el texto
             ) {
                 items(cultivos) { cultivo ->
                     CultivoItem(cultivo, onClick = { onNavigateToDetalleCultivo(cultivo.idCultivo) })
