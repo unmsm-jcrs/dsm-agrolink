@@ -92,6 +92,12 @@ fun BottonBar(
             )
 
             IconButtonWithText(
+                imageRes = R.drawable.icon_harvest,
+                contentDescription = "Mi cosecha",
+                label = "Cosecha",
+                onClick = { /*TODO*/ })
+
+            IconButtonWithText(
                 imageRes = R.drawable.icon_sky,
                 contentDescription = "Ver clima",
                 label = "Clima",
@@ -127,7 +133,10 @@ fun IconButtonWithText(
             modifier = Modifier
                 .width(60.dp) // Ancho personalizado
                 .height(40.dp) // Mantiene la altura original
-                .background(color = if (background)MaterialTheme.colorScheme.outline  else Color.Transparent, shape = CircleShape) // Fondo circular con color dinámico
+                .background(
+                    color = if (background) MaterialTheme.colorScheme.outline else Color.Transparent,
+                    shape = CircleShape
+                ) // Fondo circular con color dinámico
                 .clickable { onClick() },
             contentAlignment = Alignment.Center
         ) {
