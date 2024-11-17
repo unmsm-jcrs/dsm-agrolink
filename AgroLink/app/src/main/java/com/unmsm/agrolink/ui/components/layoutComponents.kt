@@ -40,7 +40,7 @@ import com.unmsm.agrolink.R
 @Composable
 fun TopBar() {
     TopAppBar(
-        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
+        modifier = Modifier,
         title = {
             Box(
                 modifier = Modifier.fillMaxWidth(),
@@ -48,7 +48,7 @@ fun TopBar() {
             ) {
                 Text(
                     text = stringResource(R.string.app_name),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleLarge
                 )
             }

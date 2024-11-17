@@ -16,12 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
 import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
 import com.unmsm.agrolink.R
+import com.unmsm.agrolink.ui.components.ButtonSize
+import com.unmsm.agrolink.ui.components.CustomButton
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,7 +61,6 @@ fun AgregarCultivoActivity(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .padding(25.dp),
             verticalArrangement = Arrangement.SpaceBetween, // Espacio entre elementos para botones en la parte inferior
             horizontalAlignment = Alignment.CenterHorizontally
@@ -69,14 +71,15 @@ fun AgregarCultivoActivity(
                 Text(
                     text = "Agregar cultivo",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primaryContainer,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
                 OutlinedTextField(
                     value = tipoCultivo,
                     onValueChange = { tipoCultivo = it },
                     label = { Text("Tipo de cultivo") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
@@ -114,23 +117,28 @@ fun AgregarCultivoActivity(
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
             ) {
-                Button(
-                    onClick = onNavigateBack,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
-                ) {
-                    Text("Cancelar")
-                }
-                Button(onClick = {
-                    cultivoViewModel.agregarCultivo(
-                        idUsuario = userId, // Usa el userId aquí
-                        tipoCultivo = tipoCultivo,
-                        cantidad = cantidad.toDoubleOrNull() ?: 0.0,
-                        fechaSiembra = fechaSiembra
-                    )
-                    showConfirmation = true
-                }) {
-                    Text("Guardar")
-                }
+                CustomButton(
+                    onClick = { onNavigateBack() },
+                    buttonText = "Cancelar",
+                    modifier = Modifier,
+                    type = 3,
+                    size = ButtonSize.Large
+                )
+                CustomButton(
+                    onClick = {
+                        cultivoViewModel.agregarCultivo(
+                            idUsuario = userId, // Usa el userId aquí
+                            tipoCultivo = tipoCultivo,
+                            cantidad = cantidad.toDoubleOrNull() ?: 0.0,
+                            fechaSiembra = fechaSiembra
+                        )
+                        showConfirmation = true
+                    },
+                    buttonText = "Guardar",
+                    modifier = Modifier,
+                    type = 1,
+                    size = ButtonSize.Large
+                )
             }
         }
     }

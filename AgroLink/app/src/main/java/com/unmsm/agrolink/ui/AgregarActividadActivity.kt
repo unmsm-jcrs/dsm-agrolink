@@ -16,6 +16,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import com.unmsm.agrolink.ui.components.ButtonSize
+import com.unmsm.agrolink.ui.components.CustomButton
 
 @Composable
 fun AgregarActividadActivity(
@@ -43,15 +46,13 @@ fun AgregarActividadActivity(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
                 .padding(25.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
                 Text(
                     text = "Selecciona el tipo de actividad",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.bodyLarge,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -79,7 +80,7 @@ fun AgregarActividadActivity(
             }
             var notasActividad by remember { mutableStateOf("") }
 
-            TextField(
+            OutlinedTextField(
                 value = notasActividad,
                 onValueChange = { notasActividad = it },
                 label = { Text("Notas de la actividad") },
@@ -88,14 +89,28 @@ fun AgregarActividadActivity(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
-                onClick = {
-
-                    onNavigateBack() // Regresa a la pantalla anterior
-                },
-                modifier = Modifier.fillMaxWidth()
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
             ) {
-                Text("Guardar Actividad")
+                CustomButton(
+                    onClick = { onNavigateBack() },
+                    buttonText = "Cancelar",
+                    modifier = Modifier,
+                    type = 3,
+                    size = ButtonSize.Large
+                )
+                CustomButton(
+                    onClick = {
+                        onNavigateBack() // Regresa a la pantalla anterior
+                    },
+                    buttonText = "Guardar",
+                    modifier = Modifier,
+                    type = 1,
+                    size = ButtonSize.Large
+                )
             }
         }
     }
@@ -109,7 +124,11 @@ fun RadioButtonItem(text: String, selectedOption: String, onSelect: (String) -> 
     ) {
         RadioButton(
             selected = (text == selectedOption),
-            onClick = { onSelect(text) }
+            onClick = { onSelect(text) },
+            colors = RadioButtonDefaults.colors(
+                selectedColor = MaterialTheme.colorScheme.primaryContainer,
+                unselectedColor = MaterialTheme.colorScheme.tertiaryContainer,
+            )
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(text)

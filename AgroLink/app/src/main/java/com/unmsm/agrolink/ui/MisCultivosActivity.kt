@@ -8,11 +8,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -20,6 +22,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 import com.unmsm.agrolink.R
 import com.unmsm.agrolink.models.Cultivo
+import com.unmsm.agrolink.ui.components.ButtonSize
+import com.unmsm.agrolink.ui.components.CustomButton
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
 import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
 
@@ -38,46 +42,45 @@ fun MisCultivosActivity(
         cultivoViewModel.loadCultivos(idUsuario)
     }
 
-    Scaffold(
-        modifier = modifier
-    ) { paddingValues ->
+    Scaffold { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(25.dp)
+                .padding(20.dp)
         ) {
             Text(
                 text = "Mis cultivos",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
+            Spacer(modifier = Modifier.height(10.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Button(
-                    onClick = onNavigateToAgregarCultivo,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF80CBC4))
-                ) {
-                    Text("+ Agregar cultivo")
-                }
 
-                Button(
+                CustomButton(
+                    onClick = { onNavigateToAgregarCultivo() },
+                    buttonText = "Agregar cultivo",
+                    modifier = Modifier.weight(1f),
+                    type = 2,
+                    size = ButtonSize.Medium,
+                    icon = Icons.Default.Add
+                )
+                
+                CustomButton(
                     onClick = { isDeleteMode = !isDeleteMode },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFCDD2))
-                ) {
-                    Text("Eliminar cultivo")
-                }
+                    buttonText = "Eliminar cultivo",
+                    modifier = Modifier.weight(1f),
+                    type = 4,
+                    size = ButtonSize.Medium,
+                    icon = Icons.Default.Delete
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
+            Spacer(modifier = Modifier.height(18.dp))
             LazyColumn(
-                contentPadding = paddingValues,
                 modifier = Modifier
                     .fillMaxSize()
             ) {
@@ -121,7 +124,7 @@ fun CultivoItem(
             },
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            if (isDeleteMode) Color(0xFFFFCDD2) else MaterialTheme.colorScheme.tertiary
+            if (isDeleteMode) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.tertiary
         )
     ) {
         Row(
@@ -136,25 +139,27 @@ fun CultivoItem(
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
+
             Column(
                 modifier = Modifier.weight(1f) // Hace que la columna ocupe el espacio disponible
             ) {
+
                 Text(
                     text = cultivo.tipoCultivo,
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onTertiary
+                    color = if (isDeleteMode) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onTertiary
                 )
                 Text(
                     text = "${cultivo.cantidad} Hectáreas", // Muestra el número de hectáreas
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onTertiary
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (isDeleteMode) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onTertiary
                 )
             }
             Text(
                 text = cultivo.fechaSiembra, // Muestra la fecha de siembra a la derecha
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onTertiary,
-                modifier = Modifier.align(Alignment.CenterVertically) // Centra verticalmente el texto
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (isDeleteMode) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onTertiary,
+                modifier = Modifier.align(Alignment.Bottom) // Centra verticalmente el texto
             )
         }
     }

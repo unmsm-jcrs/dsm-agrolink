@@ -29,6 +29,7 @@ import com.unmsm.agrolink.viewmodel.RegisterViewModelFactory
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     viewModel: RegisterViewModel = viewModel(factory = RegisterViewModelFactory(LocalContext.current.applicationContext as Application))
 ) {
     var nombre by remember { mutableStateOf("") }
@@ -40,10 +41,11 @@ fun RegisterScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(25.dp),
+            .padding(30.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(Modifier.height(40.dp))
         Text(
             text = "Registro",
             style = MaterialTheme.typography.titleMedium,
@@ -105,9 +107,9 @@ fun RegisterScreen(
         )
 
         TextButton(
-            onClick = { },
+            onClick = onNavigateToLogin,
             modifier = Modifier
-                .clickable { }
+                .clickable { onNavigateToLogin() }
                 .padding(0.dp)
         ) {
             Text(

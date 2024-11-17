@@ -52,7 +52,8 @@ fun AgroLinkApp(
             }
             composable("register") {
                 RegisterScreen(
-                    onRegisterSuccess = { navController.popBackStack() }
+                    onRegisterSuccess = { navController.navigate("login") },
+                    onNavigateToLogin = { navController.navigate("login") }
                 )
             }
         }

@@ -63,7 +63,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 25.dp, vertical = 16.dp)
+                .padding(horizontal = 30.dp, vertical = 16.dp)
                 .padding(top = imageHeight) // Añade padding superior para que la columna empiece debajo de la imagen
                 .align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,7 +72,7 @@ fun LoginScreen(
             Text(
                 text = "Inicio de sesión",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(

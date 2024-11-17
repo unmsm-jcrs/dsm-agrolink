@@ -39,7 +39,7 @@ val Typography = Typography(
     labelLarge = TextStyle(
         fontFamily = AkatabFont,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
+        fontSize = 19.sp
     ), //Etiquetas de cultivos(el tipo)
     labelMedium = TextStyle(
         fontFamily = AkatabFont,
@@ -49,7 +49,7 @@ val Typography = Typography(
     bodyMedium = TextStyle(
         fontFamily = AkatabFont,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 15.sp
     ), //Texto plano
     displayMedium = TextStyle(
         fontFamily = AcmeFont,
@@ -61,4 +61,9 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 21.sp
     ), //Botones Grandes
+    displaySmall = TextStyle(
+        fontFamily =AcmeFont,
+        fontWeight =FontWeight.Normal,
+        fontSize = 15.sp
+    )
 )
