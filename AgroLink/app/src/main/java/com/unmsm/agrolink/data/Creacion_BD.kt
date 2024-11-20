@@ -31,16 +31,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         db.execSQL("""
     CREATE TABLE cultivos (
-        id_cultivo INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_usuario INTEGER NOT NULL,
-        tipo_cultivo TEXT NOT NULL,
-        cantidad REAL NOT NULL,
-        fecha_siembra DATE NOT NULL,
-        estado INTEGER DEFAULT 8, -- 1: cosechado, 2: malogrado, 8: en proceso
-        visibilidad TEXT DEFAULT 'visible', -- 'visible' o 'oculto'
-        fecha_cosechado DATE,
-        FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario) ON DELETE CASCADE
-    )
+         id_cultivo INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER NOT NULL,
+    tipo_cultivo TEXT NOT NULL,
+    cantidad REAL NOT NULL,
+    fecha_siembra DATE NOT NULL,
+    estado INTEGER DEFAULT 8, -- 1: cosechado, 2: malogrado, 8: en proceso
+    visibilidad INTEGER DEFAULT 1, -- 0=oculto, 1=visible
+    fecha_cosechado DATE NOT NULL, -- Fecha de cosecha obligatoria
+    FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario) ON DELETE CASCADE
+)
 """)
 
         db.execSQL("""
@@ -117,28 +117,31 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     // Método para insertar un cultivo
-    fun insertCultivo(idUsuario: Int, tipoCultivo: String, cantidad: Double, fechaSiembra: String): Long {
+    fun insertCultivo(idUsuario: Int, tipoCultivo: String, cantidad: Double, fechaSiembra: String, visibilidad: Int, estado: Int, fechaCosechado: String): Long {
         val db = writableDatabase
         val values = ContentValues().apply {
-            put("id_usuario", idUsuario)
-            put("tipo_cultivo", tipoCultivo)
-            put("cantidad", cantidad)
-            put("fecha_siembra", fechaSiembra)
+            put("id_usuario", idUsuario) // ID del usuario asociado al cultivo
+            put("tipo_cultivo", tipoCultivo) // Tipo de cultivo
+            put("cantidad", cantidad) // Cantidad sembrada
+            put("fecha_siembra", fechaSiembra) // Fecha de siembra
+            put("visibilidad", visibilidad) // Nuevo: visibilidad del cultivo (0=oculto, 1=visible)
+            put("estado", estado) // Estado del cultivo
+            put("fecha_cosechado", fechaCosechado) // Nuevo: fecha de cosecha
         }
-        val newRowId = db.insert("cultivos", null, values)
-        db.close()
-        return newRowId
+        val newRowId = db.insert("cultivos", null, values) // Inserta los datos
+        db.close() // Cierra la conexión
+        return newRowId // Devuelve el ID de la nueva fila
     }
 
     // Método para obtener todos los cultivos de un usuario específico
     fun getCultivosPorUsuario(idUsuario: Int): List<Cultivo> {
-        val cultivos = mutableListOf<Cultivo>()
+        val cultivos = mutableListOf<Cultivo>() // Lista para almacenar los cultivos
         val db = readableDatabase
         val cursor = db.query(
-            "cultivos",
-            null,
-            "id_usuario = ?",
-            arrayOf(idUsuario.toString()),
+            "cultivos", // Tabla de la consulta
+            null, // Todas las columnas
+            "id_usuario = ?", // Condición: usuario específico
+            arrayOf(idUsuario.toString()), // Sustituye el "?" por el ID del usuario
             null,
             null,
             null
@@ -146,29 +149,32 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         with(cursor) {
             while (moveToNext()) {
                 val cultivo = Cultivo(
-                    idCultivo = getInt(getColumnIndexOrThrow("id_cultivo")),
-                    idUsuario = getInt(getColumnIndexOrThrow("id_usuario")),
-                    tipoCultivo = getString(getColumnIndexOrThrow("tipo_cultivo")),
-                    cantidad = getDouble(getColumnIndexOrThrow("cantidad")),
-                    fechaSiembra = getString(getColumnIndexOrThrow("fecha_siembra")),
-                    estado = getString(getColumnIndexOrThrow("estado"))
+                    idCultivo = getInt(getColumnIndexOrThrow("id_cultivo")), // ID del cultivo
+                    idUsuario = getInt(getColumnIndexOrThrow("id_usuario")), // ID del usuario
+                    tipoCultivo = getString(getColumnIndexOrThrow("tipo_cultivo")), // Tipo de cultivo
+                    cantidad = getDouble(getColumnIndexOrThrow("cantidad")), // Cantidad sembrada
+                    fechaSiembra = getString(getColumnIndexOrThrow("fecha_siembra")), // Fecha de siembra
+                    visibilidad = getInt(getColumnIndexOrThrow("visibilidad")), // Nuevo: visibilidad
+                    estado = getInt(getColumnIndexOrThrow("estado")), // Estado del cultivo
+                    fechaCosechado = getString(getColumnIndexOrThrow("fecha_cosechado")) // Nuevo: fecha de cosecha
                 )
-                cultivos.add(cultivo)
+                cultivos.add(cultivo) // Agrega el cultivo a la lista
             }
         }
-        cursor.close()
-        db.close()
-        return cultivos
+        cursor.close() // Cierra el cursor
+        db.close() // Cierra la conexión
+        return cultivos // Devuelve la lista de cultivos
     }
+
 
     // Método para obtener un cultivo por su ID
     fun getCultivoById(idCultivo: Int): Cultivo? {
         val db = readableDatabase
         val cursor = db.query(
-            "cultivos",
-            null,
-            "id_cultivo = ?",
-            arrayOf(idCultivo.toString()),
+            "cultivos", // Tabla
+            null, // Todas las columnas
+            "id_cultivo = ?", // Condición por ID del cultivo
+            arrayOf(idCultivo.toString()), // Sustituye el "?" por el ID del cultivo
             null,
             null,
             null
@@ -176,18 +182,21 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         var cultivo: Cultivo? = null
         if (cursor.moveToFirst()) {
             cultivo = Cultivo(
-                idCultivo = cursor.getInt(cursor.getColumnIndexOrThrow("id_cultivo")),
-                idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow("id_usuario")),
-                tipoCultivo = cursor.getString(cursor.getColumnIndexOrThrow("tipo_cultivo")),
-                cantidad = cursor.getDouble(cursor.getColumnIndexOrThrow("cantidad")),
-                fechaSiembra = cursor.getString(cursor.getColumnIndexOrThrow("fecha_siembra")),
-                estado = cursor.getString(cursor.getColumnIndexOrThrow("estado"))
+                idCultivo = cursor.getInt(cursor.getColumnIndexOrThrow("id_cultivo")), // ID del cultivo
+                idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow("id_usuario")), // ID del usuario
+                tipoCultivo = cursor.getString(cursor.getColumnIndexOrThrow("tipo_cultivo")), // Tipo de cultivo
+                cantidad = cursor.getDouble(cursor.getColumnIndexOrThrow("cantidad")), // Cantidad sembrada
+                fechaSiembra = cursor.getString(cursor.getColumnIndexOrThrow("fecha_siembra")), // Fecha de siembra
+                visibilidad = cursor.getInt(cursor.getColumnIndexOrThrow("visibilidad")), // Nuevo: visibilidad
+                estado = cursor.getInt(cursor.getColumnIndexOrThrow("estado")), // Estado del cultivo
+                fechaCosechado = cursor.getString(cursor.getColumnIndexOrThrow("fecha_cosechado")) // Nuevo: fecha de cosecha
             )
         }
-        cursor.close()
-        db.close()
-        return cultivo
+        cursor.close() // Cierra el cursor
+        db.close() // Cierra la conexión
+        return cultivo // Devuelve el cultivo, o null si no existe
     }
+
 
     // Método para insertar una actividad
     fun insertActividad(cultivoId: Int, tipoActividad: String, fecha: String, nota: String?, cantidad: Double?): Long {
