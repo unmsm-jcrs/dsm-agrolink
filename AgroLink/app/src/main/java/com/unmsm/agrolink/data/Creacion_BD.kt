@@ -30,16 +30,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         """)
 
         db.execSQL("""
-            CREATE TABLE cultivos (
-                id_cultivo INTEGER PRIMARY KEY AUTOINCREMENT,
-                id_usuario INTEGER NOT NULL,
-                tipo_cultivo TEXT NOT NULL,
-                cantidad REAL NOT NULL,
-                fecha_siembra DATE NOT NULL,
-                estado TEXT DEFAULT 'activo',
-                FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario) ON DELETE CASCADE
-            )
-        """)
+    CREATE TABLE cultivos (
+        id_cultivo INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_usuario INTEGER NOT NULL,
+        tipo_cultivo TEXT NOT NULL,
+        cantidad REAL NOT NULL,
+        fecha_siembra DATE NOT NULL,
+        estado INTEGER DEFAULT 8, -- 1: cosechado, 2: malogrado, 8: en proceso
+        visibilidad TEXT DEFAULT 'visible', -- 'visible' o 'oculto'
+        fecha_cosechado DATE,
+        FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario) ON DELETE CASCADE
+    )
+""")
 
         db.execSQL("""
             CREATE TABLE actividades_agricolas (
