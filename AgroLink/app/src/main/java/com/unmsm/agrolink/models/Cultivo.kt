@@ -8,5 +8,7 @@ data class Cultivo(
     val tipoCultivo: String,
     val cantidad: Double,
     val fechaSiembra: String,
-    val estado: String
+    val visibilidad: Int, // Nuevo: visibilidad (0 = oculto, 1 = visible)
+    val estado: Int, // Estado del cultivo
+    val fechaCosechado: String // Nuevo: fecha de cosecha
 )
