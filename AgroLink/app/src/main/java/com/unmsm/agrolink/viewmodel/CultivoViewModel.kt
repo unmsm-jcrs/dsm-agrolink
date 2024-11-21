@@ -27,10 +27,27 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // Método para agregar cultivo y recargar la lista
-    fun agregarCultivo(idUsuario: Int, tipoCultivo: String, cantidad: Double, fechaSiembra: String) {
-        dbHelper.insertCultivo(idUsuario, tipoCultivo, cantidad, fechaSiembra)
+    fun agregarCultivo(
+        idUsuario: Int,
+        tipoCultivo: String,
+        cantidad: Double,
+        fechaSiembra: String,
+        estado: Int = 8, // Por defecto, "en proceso"
+        visibilidad: Int = 1, // Por defecto, "visible"
+        fechaCosechado: String = "Pendiente" // Por defecto, algún valor representativo
+    ) {
+        dbHelper.insertCultivo(
+            idUsuario = idUsuario,
+            tipoCultivo = tipoCultivo,
+            cantidad = cantidad,
+            fechaSiembra = fechaSiembra,
+            estado = estado,
+            visibilidad = visibilidad,
+            fechaCosechado = fechaCosechado
+        )
         loadCultivos(idUsuario) // Recargar cultivos después de agregar uno nuevo
     }
+
 
     // Método para eliminar un cultivo por ID y recargar la lista
     fun eliminarCultivo(idCultivo: Int, idUsuario: Int) {
