@@ -22,7 +22,7 @@ import com.unmsm.agrolink.ui.components.TopBar
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
 import android.app.Application
-import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
+import com.unmsm.agrolink.factory.CultivoViewModelFactory
 
 
 class MainActivity : ComponentActivity() {

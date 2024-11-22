@@ -12,7 +12,11 @@ data class Actividad(
     val fecha: String,
     val nota: String?,
     val cantidad: Double? = null
-)
+){
+    fun getTipoActividadEnum(): TipoActividad? {
+        return TipoActividad.values().find { it.nombre == tipoActividad }
+    }
+}
 
 enum class TipoActividad(
     val nombre: String,
@@ -21,7 +25,7 @@ enum class TipoActividad(
     RIEGO("Riego", R.drawable.icon_water_tap),
     FERTILIZACION("Fertilizacion", R.drawable.icon_fertilizer),
     PLAGAS("Control de Plagas", R.drawable.icon_pest_control),
-    ENFERMEDADES("Control de Enfermedades", R.drawable.icon_pest_control);
+    ENFERMEDADES("Control de Enfermedades", R.drawable.icon_bacteria);
 
     override fun toString(): String = nombre
 }

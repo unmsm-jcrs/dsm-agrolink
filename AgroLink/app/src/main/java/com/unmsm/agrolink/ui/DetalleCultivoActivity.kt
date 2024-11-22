@@ -2,6 +2,8 @@
 
 package com.unmsm.agrolink.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,6 +22,8 @@ import com.unmsm.agrolink.models.Actividad
 import com.unmsm.agrolink.viewmodel.ActividadViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.res.painterResource
+import com.unmsm.agrolink.R
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
 
@@ -95,26 +99,61 @@ fun DetalleCultivoActivity(
 
 @Composable
 fun ActivityItem(actividad: Actividad) {
+    // Convertimos la cadena a enum
+    val tipoActividadEnum = actividad.getTipoActividadEnum()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 8.dp)
+            .clickable {},
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            MaterialTheme.colorScheme.tertiaryContainer
+        )
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = actividad.tipoActividad,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
+                .fillMaxWidth()
+                .padding(8.dp)
+        ){
+            Spacer(modifier = Modifier.width(10.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+
+                // Verificamos si el enum no es nulo
+                if (tipoActividadEnum != null) {
+                    Image(
+                        painter = painterResource(id = tipoActividadEnum.imagenResId),  // Acceso directo al enum
+                        contentDescription = "Imagen de ${tipoActividadEnum.nombre}",
+                        modifier = Modifier.size(40.dp)
+                    )
+                } else {
+                    // Imagen por defecto si el enum es nulo
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_my_crops),
+                        contentDescription = "Imagen por defecto",
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+
+                Text(
+                    text = tipoActividadEnum?.nombre ?: actividad.tipoActividad,  // Usa el nombre del enum o la cadena original
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+            }
             Text(
                 text = actividad.fecha,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.align(Alignment.End)
             )
         }
+
     }
 }
