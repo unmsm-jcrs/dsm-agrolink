@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.unmsm.agrolink.R
 
@@ -64,14 +65,15 @@ fun TopBar() {
 fun BottonBar(
     navController: NavHostController = rememberNavController()
 ) {
-    var userId by remember { mutableStateOf<String?>(null) }
+    val currentDestination by navController.currentBackStackEntryAsState()
+
     BottomAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, MaterialTheme.colorScheme.surfaceTint),
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly, // Espaciado igual entre los botones
+            horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -80,28 +82,48 @@ fun BottonBar(
                 imageRes = R.drawable.icon_home,
                 contentDescription = "Inicio",
                 label = "Inicio",
-                onClick = {}
+                onClick = {
+                    navController.navigate("home") {
+                        popUpTo("home") { inclusive = true }
+                    }
+                },
+                background = currentDestination?.destination?.route == "home"
             )
 
             IconButtonWithText(
                 imageRes = R.drawable.icon_my_crops,
                 contentDescription = "Mis cultivos",
                 label = "Cultivos",
-                onClick = {},
-                true
+                onClick = {
+                    navController.navigate("misCultivos") {
+                        popUpTo("misCultivos") { inclusive = true }
+                    }
+                },
+                background = currentDestination?.destination?.route == "misCultivos"
             )
 
             IconButtonWithText(
                 imageRes = R.drawable.icon_harvest,
                 contentDescription = "Mi cosecha",
                 label = "Cosecha",
-                onClick = { /*TODO*/ })
+                onClick = {
+                    navController.navigate("cosecha") {
+                        popUpTo("cosecha") { inclusive = true }
+                    }
+                },
+                background = currentDestination?.destination?.route == "cosecha"
+            )
 
             IconButtonWithText(
                 imageRes = R.drawable.icon_sky,
                 contentDescription = "Ver clima",
                 label = "Clima",
-                onClick = {}
+                onClick = {
+                    navController.navigate("clima") {
+                        popUpTo("clima") { inclusive = true }
+                    }
+                },
+                background = currentDestination?.destination?.route == "clima"
             )
 
             IconButtonWithText(
@@ -109,15 +131,16 @@ fun BottonBar(
                 contentDescription = "Usuario",
                 label = "Salir",
                 onClick = {
-                    userId = null
                     navController.navigate("login") {
-                        popUpTo("misCultivos") { inclusive = true }
+                        popUpTo("login") { inclusive = true }
                     }
-                }
+                },
+                background = currentDestination?.destination?.route == "login"
             )
         }
     }
 }
+
 
 @Composable
 fun IconButtonWithText(

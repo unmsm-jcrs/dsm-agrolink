@@ -20,6 +20,10 @@ import androidx.navigation.compose.rememberNavController
 import com.unmsm.agrolink.ui.components.BottonBar
 import com.unmsm.agrolink.ui.components.TopBar
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalContext
+import android.app.Application
+import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +109,13 @@ fun AgroLinkApp(
                         onNavigateBack = { navController.popBackStack() }
                     )
                 }
+                composable("cosecha") {
+                    CosechaScreen(
+                        idUsuario = userId!!,
+                        cultivoViewModel = viewModel(factory = CultivoViewModelFactory(LocalContext.current.applicationContext as Application))
+                    )
+                }
+
             }
         }
     }
