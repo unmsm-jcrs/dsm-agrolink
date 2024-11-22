@@ -47,6 +47,7 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
     }
 
 
+
     // Método para eliminar un cultivo por ID y recargar la lista
     fun eliminarCultivo(idCultivo: Int, idUsuario: Int) {
         viewModelScope.launch {
