@@ -17,14 +17,19 @@ class ActividadViewModel(application: Application) : AndroidViewModel(applicatio
     val actividades: LiveData<List<Actividad>> get() = _actividades
 
     // Carga las actividades para un cultivo específico
-    fun loadActividades(cultivoId: Int) {
-        _actividades.value = dbHelper.getActividadesPorCultivo(cultivoId)
+    fun loadActividades(idCultivo: Int) {
+        _actividades.value = dbHelper.getActividadesPorCultivo(idCultivo)
     }
 
 
     // Agregar una nueva actividad a un cultivo
-    fun agregarActividad(cultivoId: Int, tipoActividad: String, fecha: String, notas: String, cantidad: Double? = null) {
-        dbHelper.insertActividad(cultivoId, tipoActividad, fecha, notas, cantidad)
-        loadActividades(cultivoId)  // Recarga las actividades después de agregar una nueva
+    fun agregarActividad(idCultivo: Int, tipoActividad: String, fecha: String, notas: String, cantidad: Double? = null) {
+        dbHelper.insertActividad(idCultivo, tipoActividad, fecha, notas, cantidad)
+        loadActividades(idCultivo)  // Recarga las actividades después de agregar una nueva
+    }
+
+    private fun eliminarActividadDeBaseDatos(idActividad: Int) {
+        dbHelper.deleteActividad(idActividad)
+        loadActividades(idActividad)
     }
 }

@@ -8,14 +8,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.unmsm.agrolink.models.Cultivo
-import android.database.sqlite.SQLiteDatabase
 import com.unmsm.agrolink.data.DatabaseHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CultivoViewModel(application: Application) : AndroidViewModel(application) {
-
     private val dbHelper = DatabaseHelper(application)
 
     private val _cultivos = MutableLiveData<List<Cultivo>>()
@@ -54,7 +52,8 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    eliminarCultivoDeBaseDatos(idCultivo) // Llama al método interno para eliminar en la base de datos
+                    dbHelper.deleteCultivo(idCultivo)
+                    loadCultivos(idCultivo)
                 }
                 // Recargar cultivos después de eliminar para asegurar la actualización de la interfaz
                 loadCultivos(idUsuario)
@@ -64,14 +63,7 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    // Método interno para eliminar el cultivo de la base de datos
-    private fun eliminarCultivoDeBaseDatos(idCultivo: Int) {
-        val db: SQLiteDatabase = dbHelper.writableDatabase
-        db.delete("Cultivo", "idCultivo = ?", arrayOf(idCultivo.toString()))
-        db.close()
-    }
-
-    fun getCultivoById(idCultivo: Int): LiveData<Cultivo?> {
+    fun obtenerCultivo(idCultivo: Int): LiveData<Cultivo?> {
         val cultivoLiveData = MutableLiveData<Cultivo?>()
         cultivoLiveData.value = dbHelper.getCultivoById(idCultivo)
         return cultivoLiveData

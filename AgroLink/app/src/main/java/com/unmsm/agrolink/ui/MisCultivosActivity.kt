@@ -25,7 +25,7 @@ import com.unmsm.agrolink.models.Cultivo
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
-import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
+import com.unmsm.agrolink.factory.CultivoViewModelFactory
 
 @Composable
 fun MisCultivosActivity(

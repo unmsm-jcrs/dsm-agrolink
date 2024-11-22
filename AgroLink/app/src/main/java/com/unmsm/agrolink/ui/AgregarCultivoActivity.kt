@@ -13,16 +13,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.viewmodel.CultivoViewModel
-import com.unmsm.agrolink.viewmodel.CultivoViewModelFactory
-import com.unmsm.agrolink.R
+import com.unmsm.agrolink.factory.CultivoViewModelFactory
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
 import java.text.SimpleDateFormat
@@ -79,7 +76,11 @@ fun AgregarCultivoActivity(
                     onValueChange = { tipoCultivo = it },
                     label = { Text("Tipo de cultivo") },
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                        focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
@@ -87,7 +88,11 @@ fun AgregarCultivoActivity(
                     onValueChange = { cantidad = it },
                     label = { Text("Cantidad (Hectáreas)") },
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                        focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -106,7 +111,11 @@ fun AgregarCultivoActivity(
                                 .clickable { datePickerDialog.show() }
                         )
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().clickable { datePickerDialog.show() },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                        focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
             }
 

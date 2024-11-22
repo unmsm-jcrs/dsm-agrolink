@@ -23,14 +23,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
-import com.unmsm.agrolink.viewmodel.RegisterViewModel
-import com.unmsm.agrolink.viewmodel.RegisterViewModelFactory
+import com.unmsm.agrolink.viewmodel.AuthViewModel
+import com.unmsm.agrolink.factory.AuthViewModelFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    viewModel: RegisterViewModel = viewModel(factory = RegisterViewModelFactory(LocalContext.current.applicationContext as Application))
+    viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(LocalContext.current.applicationContext as Application))
 ) {
     var nombre by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -66,7 +67,11 @@ fun RegisterScreen(
             onValueChange = { nombre = it },
             label = { Text("Nombre") },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+            )
         )
 
         Spacer(Modifier.height(10.dp))
@@ -76,7 +81,11 @@ fun RegisterScreen(
             onValueChange = { email = it },
             label = { Text("Correo") },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+            )
         )
 
         Spacer(Modifier.height(10.dp))
@@ -87,7 +96,11 @@ fun RegisterScreen(
             label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+            )
         )
 
         Spacer(Modifier.height(30.dp))

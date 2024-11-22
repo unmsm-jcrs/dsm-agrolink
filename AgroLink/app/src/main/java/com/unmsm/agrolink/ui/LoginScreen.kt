@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unmsm.agrolink.viewmodel.AuthViewModel
-import com.unmsm.agrolink.viewmodel.AuthViewModelFactory
+import com.unmsm.agrolink.factory.AuthViewModelFactory
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -35,11 +35,12 @@ import com.unmsm.agrolink.R
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onLoginSuccess: (Int) -> Unit,
     onNavigateToRegister: () -> Unit,
-    authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(LocalContext.current.applicationContext as Application))
+    viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(LocalContext.current.applicationContext as Application))
 ) {
     var email by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
@@ -93,7 +94,11 @@ fun LoginScreen(
                 onValueChange = { email = it },
                 label = { Text("Correo") },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                    focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
 
 
@@ -116,12 +121,16 @@ fun LoginScreen(
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(imageVector = image, contentDescription = description)
                     }
-                }
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                    focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
             Spacer(modifier = Modifier.height(30.dp))
             CustomButton(
                 onClick = {
-                    val userId = authViewModel.login(email, contrasena)
+                    val userId = viewModel.login(email, contrasena)
                     if (userId != null) {
                         onLoginSuccess(userId)
                     } else {

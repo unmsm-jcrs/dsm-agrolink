@@ -319,4 +319,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return notificaciones
     }
+
+    fun deleteCultivo(idCultivo: Int) {
+        val db = writableDatabase
+        db.delete("cultivos", "id_cultivo = ?", arrayOf(idCultivo.toString()))
+        db.close()
+    }
+
+    fun deleteActividad(idActividad: Int) {
+        val db = writableDatabase
+        db.delete("actividades_agricolas", "id_actividad = ?", arrayOf(idActividad.toString()))
+        db.close()
+    }
 }

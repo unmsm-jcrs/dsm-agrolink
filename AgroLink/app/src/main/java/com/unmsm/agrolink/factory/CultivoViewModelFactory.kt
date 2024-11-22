@@ -1,10 +1,11 @@
 // CultivoViewModelFactory.kt
 
-package com.unmsm.agrolink.viewmodel
+package com.unmsm.agrolink.factory
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.unmsm.agrolink.viewmodel.CultivoViewModel
 
 class CultivoViewModelFactory(private val application: Application) : ViewModelProvider.AndroidViewModelFactory(application) {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

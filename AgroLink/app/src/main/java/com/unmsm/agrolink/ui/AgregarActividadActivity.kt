@@ -3,6 +3,7 @@ package com.unmsm.agrolink.ui
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -17,17 +18,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import com.unmsm.agrolink.models.TipoActividad
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AgregarActividadActivity(
     cultivoId: Int,
     onNavigateBack: () -> Unit,
     actividadViewModel: ActividadViewModel = viewModel()
 ) {
-    var tipoActividad by remember { mutableStateOf("Riego") } // Tipo de actividad predeterminado
+    val tipoActividades = TipoActividad.values().toList()
+    var tipoActividad by remember { mutableStateOf(tipoActividades.first().nombre) } // Tipo de actividad predeterminado
     var fechaActividad by remember { mutableStateOf("") }
+    var notasActividad by remember { mutableStateOf("") }
+    var showConfirmation by remember { mutableStateOf(false) }
+
 
     // Date picker para la fecha de la actividad
     val calendar = Calendar.getInstance()
@@ -56,11 +63,26 @@ fun AgregarActividadActivity(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Column {
-                    RadioButtonItem(text = "Riego", selectedOption = tipoActividad) { tipoActividad = it }
-                    RadioButtonItem(text = "Fertilización", selectedOption = tipoActividad) { tipoActividad = it }
-                    RadioButtonItem(text = "Control de Plagas", selectedOption = tipoActividad) { tipoActividad = it }
-                    RadioButtonItem(text = "Control de Enfermedades", selectedOption = tipoActividad) { tipoActividad = it }
+                Column(modifier = Modifier) {
+                    tipoActividades.forEach { item ->
+                        Row(
+                            modifier = Modifier.selectable(
+                                selected = tipoActividad == item.nombre,
+                                onClick = {
+                                    tipoActividad = item.nombre
+                                }
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = tipoActividad == item.nombre,
+                                onClick = {
+                                    tipoActividad = item.nombre
+                                }
+                            )
+                            Text(item.nombre)
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -75,16 +97,24 @@ fun AgregarActividadActivity(
                             Icon(Icons.Default.DateRange, contentDescription = "Seleccionar fecha")
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                        focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
             }
-            var notasActividad by remember { mutableStateOf("") }
+
 
             OutlinedTextField(
                 value = notasActividad,
                 onValueChange = { notasActividad = it },
                 label = { Text("Notas de la actividad") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
+                    focusedBorderColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -104,7 +134,13 @@ fun AgregarActividadActivity(
                 )
                 CustomButton(
                     onClick = {
-                        onNavigateBack() // Regresa a la pantalla anterior
+                        actividadViewModel.agregarActividad(
+                            idCultivo = cultivoId,
+                            tipoActividad = tipoActividad,
+                            fecha = fechaActividad,
+                            notas = notasActividad
+                        )
+                        showConfirmation = true
                     },
                     buttonText = "Guardar",
                     modifier = Modifier,
@@ -113,6 +149,22 @@ fun AgregarActividadActivity(
                 )
             }
         }
+    }
+    // Mensaje de confirmación
+    if (showConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showConfirmation = false },
+            title = { Text("Actividad agregada") },
+            text = { Text("completar....") },
+            confirmButton = {
+                Button(onClick = {
+                    showConfirmation = false
+                    onNavigateBack()
+                }) {
+                    Text("Confirmar")
+                }
+            }
+        )
     }
 }
 
