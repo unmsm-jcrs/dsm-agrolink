@@ -52,16 +52,21 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    dbHelper.deleteCultivo(idCultivo)
-                    loadCultivos(idCultivo)
+                    dbHelper.deleteCultivo(idCultivo) // Elimina de la base de datos
                 }
-                // Recargar cultivos después de eliminar para asegurar la actualización de la interfaz
+
+                // Elimina el cultivo de la lista en memoria antes de recargar la lista
+                _cultivos.value = _cultivos.value?.filter { it.idCultivo != idCultivo }
+
+                // Opcional: Actualiza la lista desde la base de datos si es necesario
                 loadCultivos(idUsuario)
+
             } catch (e: Exception) {
                 e.printStackTrace() // Manejo de error en caso de excepción
             }
         }
     }
+
 
     fun obtenerCultivo(idCultivo: Int): LiveData<Cultivo?> {
         val cultivoLiveData = MutableLiveData<Cultivo?>()

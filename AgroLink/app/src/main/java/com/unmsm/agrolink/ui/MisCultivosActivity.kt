@@ -37,6 +37,8 @@ fun MisCultivosActivity(
 ) {
     val cultivos by cultivoViewModel.cultivos.observeAsState(emptyList())
     var isDeleteMode by remember { mutableStateOf(false) } // Estado para el modo de eliminación
+    var showDialog by remember { mutableStateOf(false) } // Estado para mostrar el diálogo de confirmación
+    var cultivoToDelete by remember { mutableStateOf<Cultivo?>(null) } // Estado para el cultivo a eliminar
 
     LaunchedEffect(idUsuario) {
         cultivoViewModel.loadCultivos(idUsuario)
@@ -60,7 +62,6 @@ fun MisCultivosActivity(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-
                 CustomButton(
                     onClick = { onNavigateToAgregarCultivo() },
                     buttonText = "Agregar cultivo",
@@ -69,7 +70,7 @@ fun MisCultivosActivity(
                     size = ButtonSize.Medium,
                     icon = Icons.Default.Add
                 )
-                
+
                 CustomButton(
                     onClick = { isDeleteMode = !isDeleteMode },
                     buttonText = "Eliminar cultivo",
@@ -89,8 +90,8 @@ fun MisCultivosActivity(
                         cultivo = cultivo,
                         isDeleteMode = isDeleteMode,
                         onDelete = {
-                            cultivoViewModel.eliminarCultivo(cultivo.idCultivo, idUsuario)
-                            isDeleteMode = false // Desactivar el modo de eliminación después de eliminar
+                            cultivoToDelete = cultivo // Guardamos el cultivo a eliminar
+                            showDialog = true // Mostramos el diálogo de confirmación
                         },
                         onClick = {
                             if (!isDeleteMode) {
@@ -101,6 +102,34 @@ fun MisCultivosActivity(
                 }
             }
         }
+    }
+
+    // Diálogo de confirmación de eliminación
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "¿Deseas eliminar el cultivo?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        cultivoToDelete?.let {
+                            cultivoViewModel.eliminarCultivo(it.idCultivo, idUsuario)
+                        }
+                        showDialog = false // Cerrar el diálogo
+                        isDeleteMode = false // Salir del modo de eliminación
+                    }
+                ) {
+                    Text("Sí")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false } // Cerrar el diálogo sin hacer nada
+                ) {
+                    Text("No")
+                }
+            }
+        )
     }
 }
 
@@ -136,32 +165,60 @@ fun CultivoItem(
             Image(
                 painter = painterResource(id = R.drawable.icon_my_crops),
                 contentDescription = "Imagen del cultivo",
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(end = 16.dp)
             )
+
             Spacer(modifier = Modifier.width(16.dp))
 
+            // Columna que contiene el nombre del cultivo, cantidad y fecha de siembra
             Column(
-                modifier = Modifier.weight(1f) // Hace que la columna ocupe el espacio disponible
+                modifier = Modifier
+                    .weight(1f) // Asegura que la columna ocupe el espacio disponible
+                    .fillMaxHeight()
             ) {
-
                 Text(
                     text = cultivo.tipoCultivo,
                     style = MaterialTheme.typography.labelLarge,
                     color = if (isDeleteMode) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onTertiary
                 )
                 Text(
-                    text = "${cultivo.cantidad} Hectáreas", // Muestra el número de hectáreas
+                    text = "${cultivo.cantidad} Hectáreas",
                     style = MaterialTheme.typography.bodyMedium,
                     color = if (isDeleteMode) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onTertiary
                 )
             }
+
+            // Coloca la fecha de siembra a la derecha y alineada abajo
             Text(
-                text = cultivo.fechaSiembra, // Muestra la fecha de siembra a la derecha
+                text = cultivo.fechaSiembra,
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (isDeleteMode) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onTertiary,
-                modifier = Modifier.align(Alignment.Bottom) // Centra verticalmente el texto
+                modifier = Modifier.align(Alignment.Bottom) // Alinea verticalmente
             )
+
+            // Si está en modo de eliminación, muestra el icono de eliminación
+            if (isDeleteMode) {
+                Spacer(modifier = Modifier.width(16.dp)) // Esto asegura un espacio entre la fecha y el icono
+                Box(
+                    modifier = Modifier.fillMaxHeight(),
+                    contentAlignment = Alignment.CenterEnd // Alinea el icono de eliminación al final
+                ) {
+                    IconButton(
+                        onClick = { onDelete() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Eliminar Cultivo",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            }
         }
     }
 }
+
+
 
