@@ -30,13 +30,12 @@ fun AgregarActividadActivity(
     actividadViewModel: ActividadViewModel = viewModel()
 ) {
     val tipoActividades = TipoActividad.values().toList()
-    var tipoActividad by remember { mutableStateOf(tipoActividades.first().nombre) } // Tipo de actividad predeterminado
+    var tipoActividad by remember { mutableStateOf(tipoActividades.first().nombre) }
     var fechaActividad by remember { mutableStateOf("") }
     var notasActividad by remember { mutableStateOf("") }
     var showConfirmation by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
-
-    // Date picker para la fecha de la actividad
     val calendar = Calendar.getInstance()
     val datePickerDialog = DatePickerDialog(
         LocalContext.current,
@@ -68,17 +67,13 @@ fun AgregarActividadActivity(
                         Row(
                             modifier = Modifier.selectable(
                                 selected = tipoActividad == item.nombre,
-                                onClick = {
-                                    tipoActividad = item.nombre
-                                }
+                                onClick = { tipoActividad = item.nombre }
                             ),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
                                 selected = tipoActividad == item.nombre,
-                                onClick = {
-                                    tipoActividad = item.nombre
-                                }
+                                onClick = { tipoActividad = item.nombre }
                             )
                             Text(item.nombre)
                         }
@@ -105,7 +100,6 @@ fun AgregarActividadActivity(
                 )
             }
 
-
             OutlinedTextField(
                 value = notasActividad,
                 onValueChange = { notasActividad = it },
@@ -118,6 +112,15 @@ fun AgregarActividadActivity(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
+
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -134,13 +137,20 @@ fun AgregarActividadActivity(
                 )
                 CustomButton(
                     onClick = {
-                        actividadViewModel.agregarActividad(
-                            idCultivo = cultivoId,
-                            tipoActividad = tipoActividad,
-                            fecha = fechaActividad,
-                            notas = notasActividad
-                        )
-                        showConfirmation = true
+                        if (fechaActividad.isEmpty()) {
+                            errorMessage = "Por favor, selecciona una fecha para la actividad."
+                        } else if (notasActividad.isBlank()) {
+                            errorMessage = "Por favor, ingresa una descripción o notas de la actividad."
+                        } else {
+                            actividadViewModel.agregarActividad(
+                                idCultivo = cultivoId,
+                                tipoActividad = tipoActividad,
+                                fecha = fechaActividad,
+                                notas = notasActividad
+                            )
+                            showConfirmation = true
+                            errorMessage = ""
+                        }
                     },
                     buttonText = "Guardar",
                     modifier = Modifier,
@@ -150,12 +160,12 @@ fun AgregarActividadActivity(
             }
         }
     }
-    // Mensaje de confirmación
+
     if (showConfirmation) {
         AlertDialog(
             onDismissRequest = { showConfirmation = false },
             title = { Text("Actividad agregada") },
-            text = { Text("completar....") },
+            text = { Text("La actividad fue agregada exitosamente al cultivo.") },
             confirmButton = {
                 Button(onClick = {
                     showConfirmation = false
@@ -166,24 +176,4 @@ fun AgregarActividadActivity(
             }
         )
     }
-}
-
-@Composable
-fun RadioButtonItem(text: String, selectedOption: String, onSelect: (String) -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(4.dp)
-    ) {
-        RadioButton(
-            selected = (text == selectedOption),
-            onClick = { onSelect(text) },
-            colors = RadioButtonDefaults.colors(
-                selectedColor = MaterialTheme.colorScheme.primaryContainer,
-                unselectedColor = MaterialTheme.colorScheme.tertiaryContainer,
-            )
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text)
-    }
-
 }

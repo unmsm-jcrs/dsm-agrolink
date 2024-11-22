@@ -36,6 +36,7 @@ fun AgregarCultivoActivity(
     var cantidad by remember { mutableStateOf("") }
     var fechaSiembra by remember { mutableStateOf("") }
     var showConfirmation by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
@@ -135,13 +136,23 @@ fun AgregarCultivoActivity(
                 )
                 CustomButton(
                     onClick = {
-                        cultivoViewModel.agregarCultivo(
-                            idUsuario = userId, // Usa el userId aquí
-                            tipoCultivo = tipoCultivo,
-                            cantidad = cantidad.toDoubleOrNull() ?: 0.0,
-                            fechaSiembra = fechaSiembra
-                        )
-                        showConfirmation = true
+                        // Validación de campos
+                        errorMessage = when {
+                            tipoCultivo.isBlank() -> "El campo 'Tipo de cultivo' es obligatorio."
+                            cantidad.isBlank() -> "El campo 'Cantidad (Hectáreas)' es obligatorio."
+                            fechaSiembra.isBlank() -> "El campo 'Fecha de siembra' es obligatorio."
+                            else -> null
+                        }
+
+                        if (errorMessage == null) {
+                            cultivoViewModel.agregarCultivo(
+                                idUsuario = userId, // Usa el userId aquí
+                                tipoCultivo = tipoCultivo,
+                                cantidad = cantidad.toDoubleOrNull() ?: 0.0,
+                                fechaSiembra = fechaSiembra
+                            )
+                            showConfirmation = true
+                        }
                     },
                     buttonText = "Guardar",
                     modifier = Modifier,
@@ -150,6 +161,20 @@ fun AgregarCultivoActivity(
                 )
             }
         }
+    }
+
+    // Mensaje de error
+    if (errorMessage != null) {
+        AlertDialog(
+            onDismissRequest = { errorMessage = null },
+            title = { Text("No se añadio cultivo") },
+            text = { Text(errorMessage ?: "") },
+            confirmButton = {
+                Button(onClick = { errorMessage = null }) {
+                    Text("Aceptar")
+                }
+            }
+        )
     }
 
     // Mensaje de confirmación
@@ -169,3 +194,4 @@ fun AgregarCultivoActivity(
         )
     }
 }
+
