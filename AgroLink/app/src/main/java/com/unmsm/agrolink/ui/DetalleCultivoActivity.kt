@@ -38,6 +38,9 @@ fun DetalleCultivoActivity(
 ) {
     val actividades by actividadViewModel.actividades.observeAsState(emptyList())
     val cultivo by cultivoViewModel.obtenerCultivo(cultivoId).observeAsState()
+    var isDeleteMode by remember { mutableStateOf(false) } // Estado para el modo de eliminación
+    var showDialog by remember { mutableStateOf(false) } // Estado para mostrar el diálogo de confirmación
+    var actividadToDelete by remember { mutableStateOf<Actividad?>(null) } // Estado para el cultivo a eliminar
 
 
     LaunchedEffect(cultivoId) {
@@ -75,8 +78,8 @@ fun DetalleCultivoActivity(
                 )
 
                 CustomButton(
-                    onClick = { /* Acción de eliminar actividad */ },
-                    buttonText = "Eliminar actividad",
+                    onClick = { isDeleteMode = !isDeleteMode },
+                    buttonText = if (isDeleteMode) "Cancelar" else "Eliminar actividad",
                     modifier = Modifier
                         .weight(1f),
                     type = 4,
@@ -97,15 +100,52 @@ fun DetalleCultivoActivity(
 
             LazyColumn {
                 items(actividades) { actividad ->
-                    ActivityItem(actividad)
+                    ActivityItem(
+                        actividad = actividad,
+                        isDeleteMode = isDeleteMode,
+                        onDelete = {
+                            actividadToDelete = actividad
+                            showDialog = true
+                        }
+                    )
                 }
+            }
+            if (showDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text(text = "¿Eliminar esta actividad?") },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                actividadToDelete?.let {
+                                    actividadViewModel.eliminarActividad(it.idActividad, cultivoId)
+                                }
+                                showDialog = false
+                                isDeleteMode = false
+                            }
+                        ) {
+                            Text("Sí")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showDialog = false }
+                        ) {
+                            Text("No")
+                        }
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun ActivityItem(actividad: Actividad) {
+fun ActivityItem(
+    actividad: Actividad,
+    isDeleteMode: Boolean,
+    onDelete: () -> Unit
+) {
     // Convertimos la cadena a enum
     val tipoActividadEnum = actividad.getTipoActividadEnum()
     var showDialog by remember { mutableStateOf(false) }
@@ -115,11 +155,14 @@ fun ActivityItem(actividad: Actividad) {
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable {
-                showDialog = true // Mostrar el diálogo al hacer clic
+                if (isDeleteMode)
+                    onDelete()
+                else
+                    showDialog = true // Mostrar el diálogo al hacer clic
             },
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.tertiaryContainer
+            if (isDeleteMode) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.tertiaryContainer
         )
     ) {
         Column(
@@ -217,12 +260,6 @@ fun ActivityItem(actividad: Actividad) {
     }
 }
 
-@Composable
-fun ActivityTitle(
-
-) {
-
-}
 
 
 
