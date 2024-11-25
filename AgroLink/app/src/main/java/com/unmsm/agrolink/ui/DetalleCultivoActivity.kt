@@ -24,16 +24,24 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.painterResource
 import com.unmsm.agrolink.R
+import com.unmsm.agrolink.models.Cultivo
 import com.unmsm.agrolink.ui.components.ButtonSize
 import com.unmsm.agrolink.ui.components.CustomButton
+import com.unmsm.agrolink.viewmodel.CultivoViewModel
 
 @Composable
 fun DetalleCultivoActivity(
     cultivoId: Int,
     onNavigateToAgregarActividad: () -> Unit,
-    actividadViewModel: ActividadViewModel = viewModel()
+    actividadViewModel: ActividadViewModel = viewModel(),
+    cultivoViewModel: CultivoViewModel = viewModel()
 ) {
     val actividades by actividadViewModel.actividades.observeAsState(emptyList())
+    val cultivo by cultivoViewModel.obtenerCultivo(cultivoId).observeAsState()
+    var isDeleteMode by remember { mutableStateOf(false) } // Estado para el modo de eliminación
+    var showDialog by remember { mutableStateOf(false) } // Estado para mostrar el diálogo de confirmación
+    var actividadToDelete by remember { mutableStateOf<Actividad?>(null) } // Estado para el cultivo a eliminar
+
 
     LaunchedEffect(cultivoId) {
         actividadViewModel.loadActividades(cultivoId)
@@ -42,7 +50,7 @@ fun DetalleCultivoActivity(
     Scaffold { padding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(20.dp)
         ) {
             Text(
@@ -51,8 +59,10 @@ fun DetalleCultivoActivity(
                 color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier
             )
+            cultivo?.let {
+                CultivoItem(cultivo = it)
+            }
             Spacer(modifier = Modifier.height(10.dp))
-
             Row(
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -68,8 +78,8 @@ fun DetalleCultivoActivity(
                 )
 
                 CustomButton(
-                    onClick = { /* Acción de eliminar actividad */ },
-                    buttonText = "Eliminar actividad",
+                    onClick = { isDeleteMode = !isDeleteMode },
+                    buttonText = if (isDeleteMode) "Cancelar" else "Eliminar actividad",
                     modifier = Modifier
                         .weight(1f),
                     type = 4,
@@ -90,26 +100,69 @@ fun DetalleCultivoActivity(
 
             LazyColumn {
                 items(actividades) { actividad ->
-                    ActivityItem(actividad)
+                    ActivityItem(
+                        actividad = actividad,
+                        isDeleteMode = isDeleteMode,
+                        onDelete = {
+                            actividadToDelete = actividad
+                            showDialog = true
+                        }
+                    )
                 }
+            }
+            if (showDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text(text = "¿Eliminar esta actividad?") },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                actividadToDelete?.let {
+                                    actividadViewModel.eliminarActividad(it.idActividad, cultivoId)
+                                }
+                                showDialog = false
+                                isDeleteMode = false
+                            }
+                        ) {
+                            Text("Sí")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showDialog = false }
+                        ) {
+                            Text("No")
+                        }
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun ActivityItem(actividad: Actividad) {
+fun ActivityItem(
+    actividad: Actividad,
+    isDeleteMode: Boolean,
+    onDelete: () -> Unit
+) {
     // Convertimos la cadena a enum
     val tipoActividadEnum = actividad.getTipoActividadEnum()
+    var showDialog by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable {},
+            .clickable {
+                if (isDeleteMode)
+                    onDelete()
+                else
+                    showDialog = true // Mostrar el diálogo al hacer clic
+            },
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.tertiaryContainer
+            if (isDeleteMode) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.tertiaryContainer
         )
     ) {
         Column(
@@ -155,5 +208,118 @@ fun ActivityItem(actividad: Actividad) {
             )
         }
 
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+
+                        // Verificamos si el enum no es nulo
+                        if (tipoActividadEnum != null) {
+                            Image(
+                                painter = painterResource(id = tipoActividadEnum.imagenResId),  // Acceso directo al enum
+                                contentDescription = "Imagen de ${tipoActividadEnum.nombre}",
+                                modifier = Modifier.size(40.dp)
+                            )
+                        } else {
+                            // Imagen por defecto si el enum es nulo
+                            Image(
+                                painter = painterResource(id = R.drawable.icon_my_crops),
+                                contentDescription = "Imagen por defecto",
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(20.dp))
+
+                        Text(
+                            text = tipoActividadEnum?.nombre ?: actividad.tipoActividad,  // Usa el nombre del enum o la cadena original
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                },
+                text = {
+                    Column {
+                        Text(text = "Fecha: ${actividad.fecha}")
+                        actividad.nota?.let { Text(text = it) }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Aceptar")
+                    }
+                }
+            )
+        }
+
     }
 }
+
+
+
+
+
+@Composable
+fun CultivoItem(
+    cultivo: Cultivo
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            MaterialTheme.colorScheme.tertiary
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.icon_my_crops),
+                contentDescription = "Imagen del cultivo",
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(end = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Columna que contiene el nombre del cultivo, cantidad y fecha de siembra
+            Column(
+                modifier = Modifier
+                    .weight(1f) // Asegura que la columna ocupe el espacio disponible
+            ) {
+                Text(
+                    text = cultivo.tipoCultivo,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onTertiary
+                )
+                Text(
+                    text = "${cultivo.cantidad} Hectáreas",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiary
+                )
+            }
+
+            // Coloca la fecha de siembra a la derecha y alineada abajo
+            Text(
+                text = cultivo.fechaSiembra,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onTertiary,
+                modifier = Modifier.align(Alignment.Bottom) // Alinea verticalmente
+            )
+        }
+    }
+}
+
+
+

@@ -128,15 +128,16 @@ fun BottonBar(
 
             IconButtonWithText(
                 imageRes = R.drawable.icon_user,
-                contentDescription = "Usuario",
+                contentDescription = "Salir",
                 label = "Salir",
                 onClick = {
-                    navController.navigate("login") {
-                        popUpTo("login") { inclusive = true }
+                    navController.navigate("logout") {
+                        popUpTo("logout") { inclusive = true }
                     }
                 },
-                background = currentDestination?.destination?.route == "login"
+                background = currentDestination?.destination?.route == "logout"
             )
+
         }
     }
 }

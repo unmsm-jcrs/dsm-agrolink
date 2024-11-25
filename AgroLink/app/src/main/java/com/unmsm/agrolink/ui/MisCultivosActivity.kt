@@ -73,7 +73,7 @@ fun MisCultivosActivity(
 
                 CustomButton(
                     onClick = { isDeleteMode = !isDeleteMode },
-                    buttonText = "Eliminar cultivo",
+                    buttonText = if (isDeleteMode) "Cancelar" else "Eliminar cultivo",
                     modifier = Modifier.weight(1f),
                     type = 4,
                     size = ButtonSize.Medium,

@@ -28,8 +28,8 @@ class ActividadViewModel(application: Application) : AndroidViewModel(applicatio
         loadActividades(idCultivo)  // Recarga las actividades después de agregar una nueva
     }
 
-    private fun eliminarActividadDeBaseDatos(idActividad: Int) {
+    fun eliminarActividad(idActividad: Int, idCultivo: Int) {
         dbHelper.deleteActividad(idActividad)
-        loadActividades(idActividad)
+        loadActividades(idCultivo)
     }
 }
