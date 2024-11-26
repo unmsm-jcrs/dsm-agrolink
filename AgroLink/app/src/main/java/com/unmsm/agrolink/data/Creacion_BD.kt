@@ -244,18 +244,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return actividades
     }
 
-    // Método para insertar una notificación
-    fun insertNotificacion(idUsuario: Int, mensaje: String, tipo: String): Long {
-        val db = writableDatabase
-        val values = ContentValues().apply {
-            put("id_usuario", idUsuario)
-            put("mensaje", mensaje)
-            put("tipo", tipo)
-        }
-        val newRowId = db.insert("notificaciones", null, values)
-        db.close()
-        return newRowId
-    }
 
     // Método para registrar un nuevo usuario con manejo de excepciones
     fun registerUser(nombre: String, email: String, contrasena: String): Boolean {
@@ -297,28 +285,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return userId
     }
 
-    // Método para obtener todas las notificaciones de un usuario específico
-    fun getNotificacionesPorUsuario(idUsuario: Int): List<String> {
-        val notificaciones = mutableListOf<String>()
-        val db = readableDatabase
-        val cursor = db.query(
-            "notificaciones",
-            arrayOf("mensaje"),
-            "id_usuario = ?",
-            arrayOf(idUsuario.toString()),
-            null,
-            null,
-            null
-        )
-        with(cursor) {
-            while (moveToNext()) {
-                notificaciones.add(getString(getColumnIndexOrThrow("mensaje")))
-            }
-        }
-        cursor.close()
-        db.close()
-        return notificaciones
-    }
 
     fun deleteCultivo(idCultivo: Int) {
         val db = writableDatabase
@@ -326,9 +292,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
     }
 
+    fun actualizarCultivo(idCultivo: Int, nuevoEstado: Int, nuevaVisibilidad: Int, nuevaFechaCosechado: String) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("estado", nuevoEstado)
+            put("visibilidad", nuevaVisibilidad)
+            put("fecha_cosechado", nuevaFechaCosechado)
+        }
+        //falta
+    //completar
+    }
+
+
+
     fun deleteActividad(idActividad: Int) {
         val db = writableDatabase
         db.delete("actividades_agricolas", "id_actividad = ?", arrayOf(idActividad.toString()))
         db.close()
     }
+
+
 }

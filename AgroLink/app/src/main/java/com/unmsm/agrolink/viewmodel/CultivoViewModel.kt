@@ -3,6 +3,8 @@
 package com.unmsm.agrolink.viewmodel
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +14,8 @@ import com.unmsm.agrolink.data.DatabaseHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class CultivoViewModel(application: Application) : AndroidViewModel(application) {
     private val dbHelper = DatabaseHelper(application)
@@ -73,5 +77,56 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
         val cultivoLiveData = MutableLiveData<Cultivo?>()
         cultivoLiveData.value = dbHelper.getCultivoById(idCultivo)
         return cultivoLiveData
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun cosecharCultivo(idCultivo: Int, idUsuario: Int) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val fechaCosechaActual = obtenerFechaActual() // Deberia poder reemplazarse por la fecha que se indique
+                    dbHelper.actualizarCultivo( // Falta completar la funcion actualizarCultivo en Create_DB
+                        idCultivo = idCultivo,
+                        nuevoEstado = 1, // Estado 1: "Cosechado"
+                        nuevaVisibilidad = 0, // Ya no se ve
+                        nuevaFechaCosechado = fechaCosechaActual
+                    )
+                }
+                // Actualiza la lista de cultivos
+                _cultivos.value = _cultivos.value?.filter { it.idCultivo != idCultivo }
+                loadCultivos(idUsuario)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun desecharCultivo(idCultivo: Int, idUsuario: Int) {
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    val fechaCosechaActual = obtenerFechaActual() // Deberia poder reemplazarse por la fecha que se indique
+                    dbHelper.actualizarCultivo( // Falta completar la funcion actualizarCultivo en Create_DB
+                        idCultivo = idCultivo,
+                        nuevoEstado = 2, // Estado 2: "Malogrado"
+                        nuevaVisibilidad = 0, // Ya no se ve
+                        nuevaFechaCosechado = fechaCosechaActual
+                    )
+                }
+                // Actualiza la lista de cultivos
+                _cultivos.value = _cultivos.value?.filter { it.idCultivo != idCultivo }
+                loadCultivos(idUsuario)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun obtenerFechaActual(): String {
+        val fechaActual = LocalDate.now()
+        val formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return fechaActual.format(formatoFecha)
     }
 }
