@@ -107,10 +107,14 @@ fun RegisterScreen(
 
         CustomButton(
             onClick = {
-                if (viewModel.register(nombre, email, password)) {
-                    onRegisterSuccess()
+                if (password.length >= 8) {  // Validar longitud de la contraseña
+                    if (viewModel.register(nombre, email, password)) {
+                        onRegisterSuccess()
+                    } else {
+                        errorMessage = "Error al registrar. Intenta con un correo diferente."
+                    }
                 } else {
-                    errorMessage = "Error al registrar. Intenta con un correo diferente."
+                    errorMessage = "Minimo 8 caracteres, por favor"
                 }
             },
             buttonText = "Crear tu cuenta",

@@ -130,11 +130,15 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(30.dp))
             CustomButton(
                 onClick = {
-                    val userId = viewModel.login(email, contrasena)
-                    if (userId != null) {
-                        onLoginSuccess(userId)
+                    if (contrasena.length >= 8) {
+                        val userId = viewModel.login(email, contrasena)
+                        if (userId != null) {
+                            onLoginSuccess(userId)
+                        } else {
+                            errorMessage = "Correo o contraseña incorrectos"
+                        }
                     } else {
-                        errorMessage = "Correo o contraseña incorrectos"
+                        errorMessage = "Minimo 8 caracteres, por favor"
                     }
                 },
                 buttonText = "Iniciar sesión",
