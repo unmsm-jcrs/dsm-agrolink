@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Alignment
 import com.unmsm.agrolink.api.WeatherApiHelper
+import com.unmsm.agrolink.factory.ReporteViewModelFactory
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -99,6 +100,9 @@ fun AgroLinkApp(
                     LogoutScreen(
                         onLogout = {
                             restartApp(navController) // Reinicia la aplicación
+                        },
+                        onReporte = {
+                            navController.navigate("reporte")
                         }
                     )
                 }
@@ -136,6 +140,12 @@ fun AgroLinkApp(
                         cultivoViewModel = viewModel(factory = CultivoViewModelFactory(LocalContext.current.applicationContext as Application))
                     )
                 }
+                composable("reporte") {
+                    ReporteScreen(
+                        idUsuario = userId!!,
+                        reporteViewModel = viewModel(factory = ReporteViewModelFactory(LocalContext.current.applicationContext as Application))
+                    )
+                }
                 composable("clima") {
                     ClimaScreen(fetchWeatherData = { WeatherApiHelper.fetchWeatherData() })
                 }
@@ -170,7 +180,10 @@ fun ClimaScreen() {
 }
 
 @Composable
-fun LogoutScreen(onLogout: () -> Unit) {
+fun LogoutScreen(
+    onLogout: () -> Unit,
+    onReporte: () -> Unit
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -180,9 +193,13 @@ fun LogoutScreen(onLogout: () -> Unit) {
             Button(onClick = onLogout) {
                 Text(text = "Salir")
             }
+            Button(onClick = onReporte) {
+                Text(text = "Reporte")
+            }
         }
     }
 }
+
 
 // Función para reiniciar la aplicación
 fun restartApp(navController: NavHostController) {
