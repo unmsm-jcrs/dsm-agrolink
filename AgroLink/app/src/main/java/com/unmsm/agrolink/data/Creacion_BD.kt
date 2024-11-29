@@ -140,7 +140,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val cursor = db.query(
             "cultivos", // Tabla de la consulta
             null, // Todas las columnas
-            "id_usuario = ?", // Condición: usuario específico
+            "id_usuario = ? AND visibilidad = 1", // Condición: usuario específico
             arrayOf(idUsuario.toString()), // Sustituye el "?" por el ID del usuario
             null,
             null,
@@ -299,8 +299,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put("visibilidad", nuevaVisibilidad)
             put("fecha_cosechado", nuevaFechaCosechado)
         }
-        //falta
-    //completar
+
+        // Actualiza el cultivo con el idCultivo dado
+        val rowsAffected = db.update(
+            "cultivos", // Nombre de la tabla
+            values, // Los nuevos valores que se quieren actualizar
+            "id_cultivo = ?", // Condición para encontrar el cultivo a actualizar
+            arrayOf(idCultivo.toString()) // Parámetro para el ID del cultivo
+        )
+
+        if (rowsAffected > 0) {
+            // La actualización fue exitosa
+            Log.d("Actualizacion", "Cultivo actualizado correctamente")
+        } else {
+            // No se encontró el cultivo o no se actualizó
+            Log.d("Actualizacion", "No se encontró el cultivo con el ID: $idCultivo")
+        }
+
+        db.close() // Cerrar la base de datos después de la operación
     }
 
 
