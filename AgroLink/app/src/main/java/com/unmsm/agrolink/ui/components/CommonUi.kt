@@ -51,7 +51,10 @@ fun CustomButton(
         4 -> ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
             contentColor = MaterialTheme.colorScheme.onErrorContainer
-
+        )
+        5 -> ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.inverseSurface,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
         else -> ButtonDefaults.buttonColors(
             containerColor = Color.Gray,  // Por defecto en caso de un valor incorrecto

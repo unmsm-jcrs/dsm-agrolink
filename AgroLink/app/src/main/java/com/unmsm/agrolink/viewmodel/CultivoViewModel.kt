@@ -4,6 +4,7 @@ package com.unmsm.agrolink.viewmodel
 
 import android.app.Application
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -25,7 +26,9 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
 
     // Método para cargar cultivos de un usuario específico
     fun loadCultivos(idUsuario: Int) {
+        Log.d("CultivoViewModel", "Cargando cultivos para el usuario $idUsuario")
         _cultivos.value = dbHelper.getCultivosPorUsuario(idUsuario)
+        Log.d("CultivoViewModel", "Cultivos cargados: ${_cultivos.value}")
     }
 
     // Método para agregar cultivo y recargar la lista
@@ -81,21 +84,25 @@ class CultivoViewModel(application: Application) : AndroidViewModel(application)
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun cosecharCultivo(idCultivo: Int, idUsuario: Int) {
+        Log.d("CultivoViewModel", "Cosechando cultivo con id: $idCultivo")
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
                     val fechaCosechaActual = obtenerFechaActual() // Deberia poder reemplazarse por la fecha que se indique
+                    Log.d("CultivoViewModel", "Fecha de cosecha: $fechaCosechaActual")
                     dbHelper.actualizarCultivo( // Falta completar la funcion actualizarCultivo en Create_DB
                         idCultivo = idCultivo,
                         nuevoEstado = 1, // Estado 1: "Cosechado"
                         nuevaVisibilidad = 0, // Ya no se ve
                         nuevaFechaCosechado = fechaCosechaActual
                     )
+                    Log.d("CultivoViewModel", "Cultivo cosechado correctamente.")
                 }
                 // Actualiza la lista de cultivos
                 _cultivos.value = _cultivos.value?.filter { it.idCultivo != idCultivo }
                 loadCultivos(idUsuario)
             } catch (e: Exception) {
+                Log.e("CultivoViewModel", "Error al cosechar el cultivo: ${e.message}")
                 e.printStackTrace()
             }
         }
