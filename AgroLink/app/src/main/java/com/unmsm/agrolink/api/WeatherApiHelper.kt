@@ -15,23 +15,23 @@ object WeatherApiHelper {
                 val url = "$BASE_URL?q=$city&units=metric&appid=$API_KEY"
                 val response = URL(url).readText()
 
-                // Procesar respuesta JSON
                 val jsonObject = JSONObject(response)
-
-                // Validar código de respuesta
                 if (jsonObject.has("cod") && jsonObject.getInt("cod") != 200) {
                     println("Error en la API: ${jsonObject.getString("message")}")
                     return@withContext null
                 }
 
-                // Extraer datos del clima
                 val main = jsonObject.getJSONObject("main")
                 val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
+                val wind = jsonObject.getJSONObject("wind")
 
                 mapOf(
                     "temp" to main.getDouble("temp"),
+                    "feels_like" to main.getDouble("feels_like"),
                     "humidity" to main.getInt("humidity"),
-                    "description" to weather.getString("description")
+                    "pressure" to main.getInt("pressure"),
+                    "description" to weather.getString("description"),
+                    "wind_speed" to wind.getDouble("speed")
                 )
             } catch (e: Exception) {
                 println("Excepción en la solicitud de API: ${e.message}")
