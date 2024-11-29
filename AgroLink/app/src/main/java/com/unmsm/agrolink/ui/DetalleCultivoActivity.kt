@@ -34,6 +34,7 @@ fun DetalleCultivoActivity(
     cultivoId: Int,
     onNavigateToAgregarActividad: () -> Unit,
     actividadViewModel: ActividadViewModel = viewModel(),
+    modifier: Modifier = Modifier,
     cultivoViewModel: CultivoViewModel = viewModel()
 ) {
     val actividades by actividadViewModel.actividades.observeAsState(emptyList())

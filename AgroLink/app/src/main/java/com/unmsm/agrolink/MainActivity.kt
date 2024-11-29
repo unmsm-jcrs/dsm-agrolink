@@ -22,6 +22,8 @@ import com.unmsm.agrolink.ui.components.TopBar
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.unmsm.agrolink.factory.CultivoViewModelFactory
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import com.unmsm.agrolink.api.WeatherApiHelper
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -41,6 +44,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AgroLinkApp(
     navController: NavHostController = rememberNavController()
@@ -114,6 +118,16 @@ fun AgroLinkApp(
                         onNavigateToAgregarActividad = {
                             navController.navigate("agregarActividad/$cultivoId")
                         }
+                    )
+                }
+                composable(
+                    route = "agregarActividad/{cultivoId}",
+                    arguments = listOf(navArgument("cultivoId") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    val cultivoId = backStackEntry.arguments?.getInt("cultivoId") ?: 0
+                    AgregarActividadActivity(
+                        cultivoId = cultivoId,
+                        onNavigateBack = { navController.popBackStack() }
                     )
                 }
                 composable("cosecha") {
