@@ -7,46 +7,36 @@ AgroLink es una aplicación móvil diseñada para facilitar la gestión de culti
 ### Casos de Uso Implementados
 
 - **CUS 1: Iniciar Sesión**
-  - 🔑 **Descripción**: Acceso seguro a la aplicación mediante usuario y contraseña.
+  - 🔑 **Descripción**: Permite a los usuarios acceder a la aplicación mediante un nombre de usuario y contraseña.
   - 👤 **Actor**: Usuario
-  - ✅ **Precondición**: El usuario debe tener una cuenta activa en la aplicación.
+  - ✅ **Precondición**: El usuario debe tener una cuenta creada en la aplicación.
 
 - **CUS 2: Registrarse**
-  - 📝 **Descripción**: Creación de cuenta para nuevos usuarios.
+  - 📝 **Descripción**: Permite a nuevos usuarios crear una cuenta en la aplicación proporcionando su información personal.
   - 👤 **Actor**: Usuario
-  - ✅ **Precondición**: No debe existir una cuenta asociada.
+  - ✅ **Precondición**: El usuario no debe tener una cuenta existente.
 
-- **CUS 3: Agregar Cultivo**
-  - 🌾 **Descripción**: Permite agregar un nuevo cultivo a la lista de gestión.
+- **CUS 3: Gestionar Cultivos**
+  - 🌾 **Descripción**: Permite agregar, borrar cultivos y gestionar las actividades asociadas (riego, fertilización, etc.).
   - 👤 **Actor**: Usuario
   - ✅ **Precondición**: El usuario debe haber iniciado sesión.
 
+- **CUS 4: Gestionar Cosecha**
+  - 🌾 **Descripción**: Permite registrar la cosecha de un cultivo o desecharlo si no es viable.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: El usuario debe haber iniciado sesión y tener cultivos registrados.
+
+- **CUS 5: Ver Clima**
+  - ☀️ **Descripción**: Permite consultar las condiciones climáticas actuales y los pronósticos para la ubicación del usuario.
+  - 👤 **Actor**: Usuario
+  - ✅ **Precondición**: El usuario debe haber iniciado sesión y permitir el acceso a su ubicación.
+
 ### Casos de Uso Pendientes
 
-- **CUS 4: Consultar Cultivos**
-  - 📋 **Descripción**: Visualización de la lista de cultivos y sus actividades registradas.
+- **CUS 6: Generar Reporte de Cultivos**
+  - 📈 **Descripción**: Permite generar un reporte sobre los cultivos, mostrando estadísticas relevantes.
   - 👤 **Actor**: Usuario
-  - ✅ **Precondición**: Usuario registrado y con cultivos.
-
-- **CUS 5: Registrar Actividad Agrícola**
-  - 💧 **Descripción**: Registro de actividades como riego y fertilización.
-  - 👤 **Actor**: Usuario
-  - ✅ **Precondición**: Usuario registrado y con cultivos.
-
-- **CUS 6: Recibir Notificaciones**
-  - 🔔 **Descripción**: Notificaciones de alerta para actividades como riego y detección de plagas.
-  - 👤 **Actor**: Usuario
-  - ✅ **Precondición**: Usuario registrado y con cultivos.
-
-- **CUS 7: Ver Clima**
-  - ☀️ **Descripción**: Información climática actual y pronóstico para la ubicación.
-  - 👤 **Actor**: Usuario
-  - ✅ **Precondición**: Usuario registrado.
-
-- **CUS 8: Generar Reporte de Cultivos**
-  - 📈 **Descripción**: Generación de reporte completo de cultivos con estadísticas.
-  - 👤 **Actor**: Usuario
-  - ✅ **Precondición**: Usuario registrado con al menos un cultivo.
+  - ✅ **Precondición**: El usuario debe haber iniciado sesión y tener al menos un cultivo registrado.
 
 ## 📋 Requisitos del Sistema
 
