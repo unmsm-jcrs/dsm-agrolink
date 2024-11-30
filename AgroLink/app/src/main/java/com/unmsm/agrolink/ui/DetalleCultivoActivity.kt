@@ -1,5 +1,3 @@
-// DetalleCultivoActivity.kt
-
 package com.unmsm.agrolink.ui
 
 import androidx.compose.foundation.Image

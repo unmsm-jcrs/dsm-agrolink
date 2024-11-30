@@ -1,6 +1,7 @@
-//MainActivity,kt
 package com.unmsm.agrolink
 
+import ClimaScreen
+import CosechaScreen
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -169,15 +170,6 @@ fun HomeScreen(onNavigateToMisCultivos: () -> Unit) {
     }
 }
 
-@Composable
-fun ClimaScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Pantalla de Clima", style = MaterialTheme.typography.titleLarge)
-    }
-}
 
 @Composable
 fun LogoutScreen(

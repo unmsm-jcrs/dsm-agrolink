@@ -167,6 +167,38 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
+    fun getCultivosPorUsuarioTotal(idUsuario: Int): List<Cultivo> {
+        val cultivos = mutableListOf<Cultivo>() // Lista para almacenar los cultivos
+        val db = readableDatabase
+        val cursor = db.query(
+            "cultivos", // Tabla de la consulta
+            null, // Todas las columnas
+            "id_usuario = ?", // Condición: usuario específico
+            arrayOf(idUsuario.toString()), // Sustituye el "?" por el ID del usuario
+            null,
+            null,
+            null
+        )
+        with(cursor) {
+            while (moveToNext()) {
+                val cultivo = Cultivo(
+                    idCultivo = getInt(getColumnIndexOrThrow("id_cultivo")), // ID del cultivo
+                    idUsuario = getInt(getColumnIndexOrThrow("id_usuario")), // ID del usuario
+                    tipoCultivo = getString(getColumnIndexOrThrow("tipo_cultivo")), // Tipo de cultivo
+                    cantidad = getDouble(getColumnIndexOrThrow("cantidad")), // Cantidad sembrada
+                    fechaSiembra = getString(getColumnIndexOrThrow("fecha_siembra")), // Fecha de siembra
+                    visibilidad = getInt(getColumnIndexOrThrow("visibilidad")), // Nuevo: visibilidad
+                    estado = getInt(getColumnIndexOrThrow("estado")), // Estado del cultivo
+                    fechaCosechado = getString(getColumnIndexOrThrow("fecha_cosechado")) // Nuevo: fecha de cosecha
+                )
+                cultivos.add(cultivo) // Agrega el cultivo a la lista
+            }
+        }
+        cursor.close() // Cierra el cursor
+        db.close() // Cierra la conexión
+        return cultivos // Devuelve la lista de cultivos
+    }
+
     // Método para obtener un cultivo por su ID
     fun getCultivoById(idCultivo: Int): Cultivo? {
         val db = readableDatabase

@@ -1,5 +1,3 @@
-// LoginScreen.kt
-
 package com.unmsm.agrolink.ui
 
 //Importacion de Librerias

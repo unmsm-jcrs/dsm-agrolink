@@ -1,4 +1,3 @@
-// AgregarActividadActivity.kt
 package com.unmsm.agrolink.ui
 
 import android.app.DatePickerDialog
